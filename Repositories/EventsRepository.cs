@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using Repositories.Models;
+using Repositories.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.Models;
+using Repositories.Entities;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,15 +11,21 @@ namespace HistoryAPI.Controllers
     [ApiController]
     public class LevelsController : ControllerBase
     {
-        private readonly IEventService _eventService;
+        private readonly IEventsService _eventService;
+        private readonly ILevelsService _levelsService;
 
-        public LevelsController(IEventService eventService)
+        public LevelsController(IEventsService eventService, ILevelsService levelsService)
         {
             _eventService = eventService;
+            _levelsService = levelsService;
         }
 
-        [HttpGet]
-        public async Task<List<Event>> Get() =>
+        [HttpGet("events")]
+        public async Task<List<Event>> GetEventsAsync() =>
             await _eventService.GetAllEventsAsync();
+
+        [HttpGet("levels")]
+        public async Task<List<Level>> GetLevelsAsync() =>
+            await _levelsService.GetAllEventsAsync();
     }
 }

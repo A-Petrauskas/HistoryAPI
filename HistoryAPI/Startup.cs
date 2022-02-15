@@ -29,7 +29,10 @@ namespace HistoryAPI
                 sp => sp.GetRequiredService<IOptions<HistoryApiDatabaseSettings>>().Value);
 
             services.AddScoped<IEventsRepository, EventsRepository>();
-            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IEventsService, EventsService>();
+
+            services.AddScoped<ILevelsRepository, LevelsRepository>();
+            services.AddScoped<ILevelsService, LevelsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

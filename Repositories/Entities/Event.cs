@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Repositories.Models
+namespace Repositories.Entities
 {
     public class Event
     {
