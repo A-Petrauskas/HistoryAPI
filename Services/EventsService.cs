@@ -15,11 +15,18 @@ namespace Services
             _eventsRepository = eventsRepository;
         }
 
-        public async Task<List<Event>> GetAllEventsAsync()
+        public async Task<List<Event>> GetEventsAsync()
         {
-            var allEvents = await _eventsRepository.GetAsync();
+            var allEvents = await _eventsRepository.GetAllAsync();
 
             return allEvents;
+        }
+
+        public async Task<Event> GetEventAsync(string id)
+        {
+            var historyEvent = await _eventsRepository.GetAsync(id);
+
+            return historyEvent;
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Repositories;
 using Services;
 using Services.Interfaces;
@@ -23,6 +24,18 @@ namespace HistoryAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSwaggerGen(options =>
+            {
+                var swaggerSection = Configuration.GetSection("Swagger");
+                options.SwaggerDoc("v1", new OpenApiInfo 
+                {   
+                    Title = swaggerSection.GetValue<string>("Title"),
+                    Description = swaggerSection.GetValue<string>("Description"),
+                    Version = swaggerSection.GetValue<string>("Version")
+                });
+            });
+
 
             services.Configure<HistoryApiDatabaseSettings>(Configuration.GetSection(nameof(HistoryApiDatabaseSettings)));
             services.AddScoped<IHistoryApiDatabaseSettings>(
@@ -50,6 +63,16 @@ namespace HistoryAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+
+            app.UseSwagger(options =>
+            {
+                options.RouteTemplate = "history/swagger/{documentname}/swagger.json";
+            });
+            app.UseSwaggerUI(options => {
+                options.RoutePrefix = "history/swagger";
+                options.SwaggerEndpoint("../swagger/v1/swagger.json", "History Timeline API");
             });
         }
     }

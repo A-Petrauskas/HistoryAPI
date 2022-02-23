@@ -6,6 +6,8 @@ namespace Services.Interfaces
 {
     public interface ILevelsService
     {
-        Task<List<Level>> GetAllEventsAsync();
+        Task<List<Level>> GetLevelsAsync();
+
+        Task<Level> GetLevelAsync(string id);
     }
 }

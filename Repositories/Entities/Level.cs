@@ -11,6 +11,9 @@ namespace Repositories.Entities
         public string Id { get; set; }
 
         [BsonElement]
+        public string levelName { get; set; }
+
+        [BsonElement]
         public int timeConstraint { get; set; }
 
         [BsonElement]

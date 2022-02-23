@@ -6,6 +6,8 @@ namespace Services.Interfaces
 {
     public interface IEventsService
     {
-        Task<List<Event>> GetAllEventsAsync();
+        Task<List<Event>> GetEventsAsync();
+
+        Task<Event> GetEventAsync(string id);
     }
 }

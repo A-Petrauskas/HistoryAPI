@@ -15,11 +15,18 @@ namespace Services
             _levelsRepository = levelsRepository;
         }
 
-        public async Task<List<Level>> GetAllEventsAsync()
+        public async Task<List<Level>> GetLevelsAsync()
         {
-            var allEvents = await _levelsRepository.GetAsync();
+            var allLevels = await _levelsRepository.GetAllAsync();
 
-            return allEvents;
+            return allLevels;
+        }
+
+        public async Task<Level> GetLevelAsync(string id)
+        {
+            var level = await _levelsRepository.GetAsync(id);
+
+            return level;
         }
     }
 }

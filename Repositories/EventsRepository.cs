@@ -7,17 +7,28 @@ namespace Repositories
 {
     public class EventsRepository : IEventsRepository
     {
-        public readonly IMongoCollection<Event> _event;
+        public readonly IMongoCollection<Event> _events;
 
         public EventsRepository(IHistoryApiDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _event = database.GetCollection<Event>("events");
+            _events = database.GetCollection<Event>("events");
         }
 
-        public async Task<List<Event>> GetAsync() =>
-            await _event.Find(_ => true).ToListAsync();
+        public async Task<List<Event>> GetAllAsync()
+        {
+            var task = await _events.FindAsync<Event>(_ => true);
+
+            return await task.ToListAsync();
+        }
+            
+        public async Task<Event> GetAsync(string id)
+        {
+            var task = await _events.FindAsync<Event>(historyEvent => historyEvent.Id == id);
+
+            return await task.FirstOrDefaultAsync();
+        }
     }
 }
