@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,11 +26,13 @@ namespace HistoryAPI
         {
             services.AddControllers();
 
+
+            //Adding Swagger documentation
             services.AddSwaggerGen(options =>
             {
                 var swaggerSection = Configuration.GetSection("Swagger");
-                options.SwaggerDoc("v1", new OpenApiInfo 
-                {   
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
                     Title = swaggerSection.GetValue<string>("Title"),
                     Description = swaggerSection.GetValue<string>("Description"),
                     Version = swaggerSection.GetValue<string>("Version")
@@ -37,6 +40,16 @@ namespace HistoryAPI
             });
 
 
+            //Adding AutoMapperConfiguration
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+
+
+            //Dependency injections
             services.Configure<HistoryApiDatabaseSettings>(Configuration.GetSection(nameof(HistoryApiDatabaseSettings)));
             services.AddScoped<IHistoryApiDatabaseSettings>(
                 sp => sp.GetRequiredService<IOptions<HistoryApiDatabaseSettings>>().Value);
@@ -46,6 +59,7 @@ namespace HistoryAPI
 
             services.AddScoped<ILevelsRepository, LevelsRepository>();
             services.AddScoped<ILevelsService, LevelsService>();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +84,8 @@ namespace HistoryAPI
             {
                 options.RouteTemplate = "history/swagger/{documentname}/swagger.json";
             });
-            app.UseSwaggerUI(options => {
+            app.UseSwaggerUI(options =>
+            {
                 options.RoutePrefix = "history/swagger";
                 options.SwaggerEndpoint("../swagger/v1/swagger.json", "History Timeline API");
             });

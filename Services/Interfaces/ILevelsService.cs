@@ -1,4 +1,4 @@
-﻿using Repositories.Entities;
+﻿using Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,8 +6,8 @@ namespace Services.Interfaces
 {
     public interface ILevelsService
     {
-        Task<List<Level>> GetLevelsAsync();
+        Task<List<LevelContract>> GetLevelsAsync();
 
-        Task<Level> GetLevelAsync(string id);
+        Task<LevelContract> GetLevelAsync(string id);
     }
 }

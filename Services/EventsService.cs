@@ -1,5 +1,6 @@
-﻿using Repositories;
-using Repositories.Entities;
+﻿using AutoMapper;
+using Repositories;
+using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,24 +10,30 @@ namespace Services
     public class EventsService : IEventsService
     {
         private readonly IEventsRepository _eventsRepository;
+        private readonly IMapper _mapper;
 
-        public EventsService(IEventsRepository eventsRepository)
+        public EventsService(IEventsRepository eventsRepository, IMapper mapper)
         {
             _eventsRepository = eventsRepository;
+            mapper = _mapper;
         }
 
-        public async Task<List<Event>> GetEventsAsync()
+        public async Task<List<EventContract>> GetEventsAsync()
         {
-            var allEvents = await _eventsRepository.GetAllAsync();
+            var allEventsEntity = await _eventsRepository.GetAllAsync();
 
-            return allEvents;
+            var allEventsContract = _mapper.Map<List<EventContract>>(allEventsEntity);
+
+            return allEventsContract;
         }
 
-        public async Task<Event> GetEventAsync(string id)
+        public async Task<EventContract> GetEventAsync(string id)
         {
-            var historyEvent = await _eventsRepository.GetAsync(id);
+            var historyEventEntity = await _eventsRepository.GetAsync(id);
 
-            return historyEvent;
+            var historyEventContract = _mapper.Map<EventContract>(historyEventEntity);
+
+            return historyEventContract;
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Repositories
 {
     public interface IEventsRepository
     {
-        Task<List<Event>> GetAllAsync();
+        Task<List<EventEntity>> GetAllAsync();
 
-        Task<Event> GetAsync(string id);
+        Task<EventEntity> GetAsync(string id);
     }
 }

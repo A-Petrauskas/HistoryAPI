@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Repositories.Entities
 {
-    public class Level
+    public class LevelEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -26,6 +26,6 @@ namespace Repositories.Entities
         public string highScoreUserId { get; set; }
 
         [BsonElement]
-        public List<Event> Events { get; set; }
+        public List<EventEntity> Events { get; set; }
     }
 }

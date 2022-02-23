@@ -6,8 +6,8 @@ namespace Repositories
 {
     public interface ILevelsRepository
     {
-        Task<List<Level>> GetAllAsync();
+        Task<List<LevelEntity>> GetAllAsync();
 
-        Task<Level> GetAsync(string id);
+        Task<LevelEntity> GetAsync(string id);
     }
 }

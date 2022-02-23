@@ -1,5 +1,6 @@
-﻿using Repositories;
-using Repositories.Entities;
+﻿using AutoMapper;
+using Repositories;
+using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,24 +10,30 @@ namespace Services
     public class LevelsService : ILevelsService
     {
         private readonly ILevelsRepository _levelsRepository;
+        private readonly IMapper _mapper;
 
-        public LevelsService(ILevelsRepository levelsRepository)
+        public LevelsService(ILevelsRepository levelsRepository, IMapper mapper)
         {
             _levelsRepository = levelsRepository;
+            mapper = _mapper;
         }
 
-        public async Task<List<Level>> GetLevelsAsync()
+        public async Task<List<LevelContract>> GetLevelsAsync()
         {
-            var allLevels = await _levelsRepository.GetAllAsync();
+            var allLevelsEntity = await _levelsRepository.GetAllAsync();
 
-            return allLevels;
+            var allLevelsContract = _mapper.Map<List<LevelContract>>(allLevelsEntity);
+
+            return allLevelsContract;
         }
 
-        public async Task<Level> GetLevelAsync(string id)
+        public async Task<LevelContract> GetLevelAsync(string id)
         {
-            var level = await _levelsRepository.GetAsync(id);
+            var levelEntity = await _levelsRepository.GetAsync(id);
 
-            return level;
+            var levelContract = _mapper.Map<LevelContract>(levelEntity);
+
+            return levelContract;
         }
     }
 }

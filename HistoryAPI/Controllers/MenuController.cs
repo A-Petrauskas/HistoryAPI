@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.Entities;
+using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,12 +9,12 @@ namespace HistoryAPI.Controllers
     [Route("history")]
     [Produces("application/json")]
     [ApiController]
-    public class LevelsController : ControllerBase
+    public class MenuController : ControllerBase
     {
         private readonly IEventsService _eventsService;
         private readonly ILevelsService _levelsService;
 
-        public LevelsController(IEventsService eventsService, ILevelsService levelsService)
+        public MenuController(IEventsService eventsService, ILevelsService levelsService)
         {
             _eventsService = eventsService;
             _levelsService = levelsService;
@@ -22,19 +22,19 @@ namespace HistoryAPI.Controllers
 
 
         [HttpGet("events")]
-        public async Task<List<Event>> GetEventsAsync() =>
+        public async Task<List<EventContract>> GetEventsAsync() =>
             await _eventsService.GetEventsAsync();
 
         [HttpGet("events/{id}")]
-        public async Task<Event> GetEventAsync(string id) =>
+        public async Task<EventContract> GetEventAsync(string id) =>
             await _eventsService.GetEventAsync(id);
 
         [HttpGet("levels")]
-        public async Task<List<Level>> GetLevelsAsync() =>
+        public async Task<List<LevelContract>> GetLevelsAsync() =>
             await _levelsService.GetLevelsAsync();
 
         [HttpGet("levels/{id}")]
-        public async Task<Level> GetLevelAsync(string id) =>
+        public async Task<LevelContract> GetLevelAsync(string id) =>
             await _levelsService.GetLevelAsync(id);
     }
 }

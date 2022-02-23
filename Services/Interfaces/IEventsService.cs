@@ -1,4 +1,4 @@
-﻿using Repositories.Entities;
+﻿using Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,8 +6,8 @@ namespace Services.Interfaces
 {
     public interface IEventsService
     {
-        Task<List<Event>> GetEventsAsync();
+        Task<List<EventContract>> GetEventsAsync();
 
-        Task<Event> GetEventAsync(string id);
+        Task<EventContract> GetEventAsync(string id);
     }
 }
