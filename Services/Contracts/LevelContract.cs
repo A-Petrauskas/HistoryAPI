@@ -9,6 +9,7 @@ namespace Services.Contracts
         public string Id { get; set; }
 
         public string levelName { get; set; }
+
         public int timeConstraint { get; set; }
 
         public int mistakes { get; set; }

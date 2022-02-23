@@ -15,7 +15,7 @@ namespace Services
         public LevelsService(ILevelsRepository levelsRepository, IMapper mapper)
         {
             _levelsRepository = levelsRepository;
-            mapper = _mapper;
+            _mapper = mapper;
         }
 
         public async Task<List<LevelContract>> GetLevelsAsync()

@@ -15,7 +15,7 @@ namespace Services
         public EventsService(IEventsRepository eventsRepository, IMapper mapper)
         {
             _eventsRepository = eventsRepository;
-            mapper = _mapper;
+            _mapper = mapper;
         }
 
         public async Task<List<EventContract>> GetEventsAsync()
