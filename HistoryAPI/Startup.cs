@@ -40,7 +40,7 @@ namespace HistoryAPI
             });
 
 
-            //Adding AutoMapperConfiguration
+            //Adding AutoMapper Configuration
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());

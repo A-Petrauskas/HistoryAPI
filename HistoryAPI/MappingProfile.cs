@@ -8,11 +8,11 @@ namespace HistoryAPI
     {
         public MappingProfile()
         {
-            CreateMap<EventEntity, EventContract>();
-            CreateMap<EventContract, EventEntity>();
+            CreateMap<EventEntity, EventContract>()
+             .ReverseMap();
 
-            CreateMap<LevelEntity, LevelContract>();
-            CreateMap<LevelContract, LevelEntity>();
+            CreateMap<LevelEntity, LevelContract>()
+             .ReverseMap();
         }
     }
 }
