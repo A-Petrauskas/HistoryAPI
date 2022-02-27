@@ -6,6 +6,8 @@ namespace Services.Contracts
     {
         public Guid gameId;
 
+        public string levelid;
+
         public LevelContract level;
     }
 }

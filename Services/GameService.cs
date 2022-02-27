@@ -1,6 +1,8 @@
-﻿using Services.Contracts;
+﻿using AutoMapper;
+using Services.Contracts;
 using Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services
@@ -8,28 +10,48 @@ namespace Services
     public class GameService : IGameService
     {
         private readonly ILevelsService _levelsService;
+        private readonly IMapper _mapper;
 
-        public GameService(ILevelsService levelsService)
+        private static List<GameInstance> gameList = new List<GameInstance>();
+
+        public GameService(ILevelsService levelsService, IMapper mapper)
         {
             _levelsService = levelsService;
+            _mapper = mapper;
         }
 
 
         public async Task<string> StartNewGameAsync(string levelId)
         {
+            var level = await _levelsService.GetLevelAsync(levelId);
+
             GameInstance gameInstance = new GameInstance
             {
                 gameId = Guid.NewGuid(),
-                level = await _levelsService.GetLevelAsync(levelId)
+                level = level,
+                levelid = level.Id
             };
+
+            gameList.Add(gameInstance);
 
             return gameInstance.gameId.ToString();
         }
 
-        public async Task<EventGameContract> GetNextEventAsync(string gameId)
+        public EventGameContract GetNextEventAsync(string gameId)
         {
-            //Keep connection alive / listen
-            return null;
+            var game = gameList.Find(game => game.gameId.ToString() == gameId);
+            var eventList = game.level.Events;
+
+            var index = new Random().Next(eventList.Count);
+
+            var nextEvent = eventList[index];
+
+            eventList.RemoveAt(index); // TODO: CHECK IF ITS OVER (THE LIST IS EMPTY)
+            game.level.Events = eventList;
+
+            var nextEventGameContract = _mapper.Map<EventGameContract>(nextEvent);
+
+            return nextEventGameContract; // TODO: remove ids to events in the game but save what event it gave
         }
     }
 }

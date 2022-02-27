@@ -17,7 +17,7 @@ namespace HistoryAPI.Controllers
             _gameService = gameservice;
         }
 
-        [HttpPost("start/{levelid}")]
+        [HttpPost("start/{levelid}")] //TODO: Change into frontend cookie for user identification
         public async Task<ActionResult<string>> StartNewGameAsync(string levelid)
         {
             var gameId = await _gameService.StartNewGameAsync(levelid);
@@ -26,9 +26,9 @@ namespace HistoryAPI.Controllers
         }
 
         [HttpGet("{gameid}/event")]
-        public async Task<ActionResult<EventGameContract>> GetNextEventAsync(string gameid)
+        public ActionResult<EventGameContract> GetNextEventAsync(string gameid)
         {
-            var nextEvent = await _gameService.GetNextEventAsync(gameid);
+            var nextEvent = _gameService.GetNextEventAsync(gameid);
 
             return Ok(nextEvent);
         }
