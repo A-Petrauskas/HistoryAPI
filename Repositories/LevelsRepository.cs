@@ -31,5 +31,12 @@ namespace Repositories
 
             return await task.FirstOrDefaultAsync();
         }
+
+        public async Task<LevelEntity> GetByNameAsync(string name)
+        {
+            var task = await _levels.FindAsync(level => level.name == name);
+
+            return await task.FirstOrDefaultAsync();
+        }
     }
 }

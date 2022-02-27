@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -22,19 +23,29 @@ namespace HistoryAPI.Controllers
 
 
         [HttpGet("events")]
-        public async Task<List<EventContract>> GetEventsAsync() =>
+        public async Task<ActionResult<List<EventContract>>> GetEventsAsync() =>
             await _eventsService.GetEventsAsync();
 
+
         [HttpGet("events/{id}")]
-        public async Task<EventContract> GetEventAsync(string id) =>
+        public async Task<ActionResult<EventContract>> GetEventAsync(string id) =>
             await _eventsService.GetEventAsync(id);
 
+
         [HttpGet("levels")]
-        public async Task<List<LevelContract>> GetLevelsAsync() =>
+        public async Task<ActionResult<List<LevelContract>>> GetLevelsAsync() =>
             await _levelsService.GetLevelsAsync();
 
-        [HttpGet("levels/{id}")]
-        public async Task<LevelContract> GetLevelAsync(string id) =>
+
+        [HttpGet("levels/byid/{id}")]
+        public async Task<ActionResult<LevelContract>> GetLevelAsync(string id) =>
             await _levelsService.GetLevelAsync(id);
+
+        [HttpGet("levels/byname/{name}")]
+        public async Task<ActionResult<LevelContract>> GetLevelByNameAsync(string name) 
+        {
+            return await _levelsService.GetLevelByNameAsync(name);
+        }
+            
     }
 }

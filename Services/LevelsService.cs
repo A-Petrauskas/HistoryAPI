@@ -35,5 +35,14 @@ namespace Services
 
             return levelContract;
         }
+
+        public async Task<LevelContract> GetLevelByNameAsync(string name)
+        {
+            var levelEntity = await _levelsRepository.GetByNameAsync(name);
+
+            var levelContract = _mapper.Map<LevelContract>(levelEntity);
+
+            return levelContract;
+        }
     }
 }

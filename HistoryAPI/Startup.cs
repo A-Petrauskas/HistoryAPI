@@ -60,6 +60,8 @@ namespace HistoryAPI
             services.AddScoped<ILevelsRepository, LevelsRepository>();
             services.AddScoped<ILevelsService, LevelsService>();
             services.AddSingleton(mapper);
+
+            services.AddScoped<IGameService, GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

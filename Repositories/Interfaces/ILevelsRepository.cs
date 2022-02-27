@@ -9,5 +9,7 @@ namespace Repositories
         Task<List<LevelEntity>> GetAllAsync();
 
         Task<LevelEntity> GetAsync(string id);
+
+        Task<LevelEntity> GetByNameAsync(string name);
     }
 }

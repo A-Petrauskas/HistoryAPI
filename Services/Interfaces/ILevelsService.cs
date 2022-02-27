@@ -9,5 +9,7 @@ namespace Services.Interfaces
         Task<List<LevelContract>> GetLevelsAsync();
 
         Task<LevelContract> GetLevelAsync(string id);
+
+        Task<LevelContract> GetLevelByNameAsync(string name);
     }
 }

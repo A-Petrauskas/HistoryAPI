@@ -6,7 +6,7 @@ namespace Services.Contracts
     {
         public string Id { get; set; }
 
-        public string levelName { get; set; }
+        public string name { get; set; }
 
         public int timeConstraint { get; set; }
 

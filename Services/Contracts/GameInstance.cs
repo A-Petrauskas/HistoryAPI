@@ -1,8 +1,10 @@
-﻿namespace Services.Contracts
+﻿using System;
+
+namespace Services.Contracts
 {
     public class GameInstance
     {
-        public string gameId;
+        public Guid gameId;
 
         public LevelContract level;
     }
