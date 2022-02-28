@@ -29,7 +29,8 @@ namespace Services
             {
                 gameId = Guid.NewGuid(),
                 levelEvents = level.Events,
-                levelid = level.Id
+                levelid = level.Id,
+                usedEvents = new List<EventContract>()
             };
 
             gameList.Add(gameInstance);
@@ -50,6 +51,7 @@ namespace Services
             var index = new Random().Next(eventList.Count);
 
             var nextEvent = eventList[index];
+            game.usedEvents.Add(nextEvent); //SORT before finding if it is wrong
 
             eventList.RemoveAt(index);
             game.levelEvents = eventList;

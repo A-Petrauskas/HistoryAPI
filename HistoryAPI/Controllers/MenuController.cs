@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -42,10 +41,10 @@ namespace HistoryAPI.Controllers
             await _levelsService.GetLevelAsync(id);
 
         [HttpGet("levels/byname/{name}")]
-        public async Task<ActionResult<LevelContract>> GetLevelByNameAsync(string name) 
+        public async Task<ActionResult<LevelContract>> GetLevelByNameAsync(string name)
         {
             return await _levelsService.GetLevelByNameAsync(name);
         }
-            
+
     }
 }

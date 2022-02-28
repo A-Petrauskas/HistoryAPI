@@ -17,7 +17,7 @@ namespace HistoryAPI.Controllers
             _gameService = gameservice;
         }
 
-        [HttpPost("start/{levelid}")] 
+        [HttpPost("start/{levelid}")]
         public async Task<ActionResult<string>> StartNewGameAsync(string levelid)
         {
             var gameId = await _gameService.StartNewGameAsync(levelid);

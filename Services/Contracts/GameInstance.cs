@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Services.Contracts
@@ -12,7 +11,7 @@ namespace Services.Contracts
 
         public List<EventContract> levelEvents;
 
-        public SortedSet<EventContract> usedEvents;
+        public List<EventContract> usedEvents;
 
         public int mistakes;
 
