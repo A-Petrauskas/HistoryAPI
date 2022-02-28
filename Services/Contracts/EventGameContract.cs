@@ -2,8 +2,8 @@
 {
     public class EventGameContract
     {
-        public string Id { get; set; }
-
         public string description { get; set; }
+
+        //image or gif
     }
 }

@@ -7,6 +7,8 @@ namespace Services.Interfaces
     {
         Task<string> StartNewGameAsync(string levelId);
 
-        EventGameContract GetNextEventAsync(string gameId);
+        EventGameContract GetNextEvent(GameInstance game);
+
+        GameInstance CheckGameExists(string gameId);
     }
 }

@@ -28,30 +28,48 @@ namespace Services
             GameInstance gameInstance = new GameInstance
             {
                 gameId = Guid.NewGuid(),
-                level = level,
+                levelEvents = level.Events,
                 levelid = level.Id
             };
 
             gameList.Add(gameInstance);
-
+            //Immediately send new event !!!!!!!!!!!!
             return gameInstance.gameId.ToString();
         }
 
-        public EventGameContract GetNextEventAsync(string gameId)
+
+        public EventGameContract GetNextEvent(GameInstance game)
         {
-            var game = gameList.Find(game => game.gameId.ToString() == gameId);
-            var eventList = game.level.Events;
+            var eventList = game.levelEvents;
+
+            if (eventList.Count == 0)
+            {
+                return null;
+            }
 
             var index = new Random().Next(eventList.Count);
 
             var nextEvent = eventList[index];
 
-            eventList.RemoveAt(index); // TODO: CHECK IF ITS OVER (THE LIST IS EMPTY)
-            game.level.Events = eventList;
+            eventList.RemoveAt(index);
+            game.levelEvents = eventList;
 
             var nextEventGameContract = _mapper.Map<EventGameContract>(nextEvent);
 
-            return nextEventGameContract; // TODO: remove ids to events in the game but save what event it gave
+            return nextEventGameContract;
+        }
+
+
+        public GameInstance CheckGameExists(string gameId)
+        {
+            var game = gameList.Find(game => game.gameId.ToString() == gameId);
+
+            if (game == null)
+            {
+                return null;
+            }
+
+            return game;
         }
     }
 }

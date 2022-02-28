@@ -17,18 +17,31 @@ namespace HistoryAPI.Controllers
             _gameService = gameservice;
         }
 
-        [HttpPost("start/{levelid}")] //TODO: Change into frontend cookie for user identification
+        [HttpPost("start/{levelid}")] 
         public async Task<ActionResult<string>> StartNewGameAsync(string levelid)
         {
             var gameId = await _gameService.StartNewGameAsync(levelid);
 
-            return Ok(gameId);
+            return Ok(gameId); //change into created at??
         }
 
-        [HttpGet("{gameid}/event")]
+        [HttpGet("{gameid}/event")] //TODO: Change into frontend cookie for user identification
         public ActionResult<EventGameContract> GetNextEventAsync(string gameid)
         {
-            var nextEvent = _gameService.GetNextEventAsync(gameid);
+            var game = _gameService.CheckGameExists(gameid);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var nextEvent = _gameService.GetNextEvent(game);
+
+            if (nextEvent == null)
+            {
+                // return _gameService.GetGameFinished();
+                return BadRequest(); //Testing
+            }
 
             return Ok(nextEvent);
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Services.Contracts
 {
@@ -8,6 +10,12 @@ namespace Services.Contracts
 
         public string levelid;
 
-        public LevelContract level;
+        public List<EventContract> levelEvents;
+
+        public SortedSet<EventContract> usedEvents;
+
+        public int mistakes;
+
+        public List<EventContract> mistakenEvents;
     }
 }
