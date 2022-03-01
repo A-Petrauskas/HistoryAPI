@@ -12,7 +12,7 @@ namespace Services
         private readonly ILevelsService _levelsService;
         private readonly IMapper _mapper;
 
-        private static List<GameInstance> gameList = new List<GameInstance>();
+        private static List<GameInstanceContract> gameList = new List<GameInstanceContract>();
 
         public GameService(ILevelsService levelsService, IMapper mapper)
         {
@@ -25,7 +25,7 @@ namespace Services
         {
             var level = await _levelsService.GetLevelAsync(levelId);
 
-            GameInstance gameInstance = new GameInstance
+            GameInstanceContract gameInstance = new GameInstanceContract
             {
                 gameId = Guid.NewGuid(),
                 levelEvents = level.Events,
@@ -39,7 +39,7 @@ namespace Services
         }
 
 
-        public EventGameContract GetNextEvent(GameInstance game)
+        public EventGameContract GetNextEvent(GameInstanceContract game)
         {
             var eventList = game.levelEvents;
 
@@ -62,7 +62,7 @@ namespace Services
         }
 
 
-        public GameInstance CheckGameExists(string gameId)
+        public GameInstanceContract CheckGameExists(string gameId)
         {
             var game = gameList.Find(game => game.gameId.ToString() == gameId);
 
