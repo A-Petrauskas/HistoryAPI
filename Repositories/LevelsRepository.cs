@@ -38,5 +38,19 @@ namespace Repositories
 
             return await task.FirstOrDefaultAsync();
         }
+
+        public async Task<LevelEntity> CreateLevelAsync(LevelEntity newLevel)
+        {
+            await _levels.InsertOneAsync(newLevel);
+
+            return newLevel;
+        }
+
+        public async Task<LevelEntity> UpdateLevelAsync(LevelEntity level)
+        {
+            var updatedLevel = await _levels.ReplaceOneAsync(l => l.Id == level.Id, level);
+
+            return level;
+        }
     }
 }

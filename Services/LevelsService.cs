@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Repositories;
+using Repositories.Entities;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -43,6 +44,24 @@ namespace Services
             var levelContract = _mapper.Map<LevelContract>(levelEntity);
 
             return levelContract;
+        }
+
+        public async Task<LevelContract> CreateLevelAsync(LevelContract newLevel)
+        {
+            var newLevelEntity = _mapper.Map<LevelEntity>(newLevel);
+
+            await _levelsRepository.CreateLevelAsync(newLevelEntity);
+
+            return newLevel;
+        }
+
+        public async Task<LevelContract> UpdateLevelAsync(LevelContract level)
+        {
+            var levelEntity = _mapper.Map<LevelEntity>(level);
+
+            await _levelsRepository.UpdateLevelAsync(levelEntity);
+
+            return level;
         }
     }
 }

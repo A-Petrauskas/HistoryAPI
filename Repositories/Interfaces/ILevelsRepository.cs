@@ -11,5 +11,9 @@ namespace Repositories
         Task<LevelEntity> GetAsync(string id);
 
         Task<LevelEntity> GetByNameAsync(string name);
+
+        Task<LevelEntity> CreateLevelAsync(LevelEntity newLevel);
+
+        Task<LevelEntity> UpdateLevelAsync(LevelEntity level);
     }
 }

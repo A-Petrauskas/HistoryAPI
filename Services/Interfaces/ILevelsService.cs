@@ -11,5 +11,9 @@ namespace Services.Interfaces
         Task<LevelContract> GetLevelAsync(string id);
 
         Task<LevelContract> GetLevelByNameAsync(string name);
+
+        Task<LevelContract> CreateLevelAsync(LevelContract newLevel);
+
+        Task<LevelContract> UpdateLevelAsync(LevelContract level);
     }
 }
