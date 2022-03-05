@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ namespace HistoryAPI.Controllers
             _eventsService = eventsService;
             _levelsService = levelsService;
         }
-
 
         [HttpGet("events")]
         public async Task<ActionResult<List<EventContract>>> GetEventsAsync() =>

@@ -25,9 +25,18 @@ namespace HistoryAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000",
+                                                          "http://localhost:5000");
+                                  });
+            });
 
 
-            //Adding Swagger documentation
+            // Adding Swagger documentation
             services.AddSwaggerGen(options =>
             {
                 var swaggerSection = Configuration.GetSection("Swagger");
@@ -40,7 +49,7 @@ namespace HistoryAPI
             });
 
 
-            //Adding AutoMapper Configuration
+            // Adding AutoMapper Configuration
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
@@ -49,7 +58,7 @@ namespace HistoryAPI
             IMapper mapper = mapperConfig.CreateMapper();
 
 
-            //Dependency injections
+            // Dependency injections
             services.Configure<HistoryApiDatabaseSettings>(Configuration.GetSection(nameof(HistoryApiDatabaseSettings)));
             services.AddScoped<IHistoryApiDatabaseSettings>(
                 sp => sp.GetRequiredService<IOptions<HistoryApiDatabaseSettings>>().Value);
@@ -75,6 +84,9 @@ namespace HistoryAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Enable CORS
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
