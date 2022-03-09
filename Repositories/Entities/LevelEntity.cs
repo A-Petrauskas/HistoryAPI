@@ -14,6 +14,15 @@ namespace Repositories.Entities
         public string name { get; set; }
 
         [BsonElement]
+        public string description { get; set; }
+
+        [BsonElement]
+        public string imageSrc { get; set; }
+
+        [BsonElement]
+        public int eventCount { get; set; }
+
+        [BsonElement]
         public int timeConstraint { get; set; }
 
         [BsonElement]

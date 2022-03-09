@@ -14,6 +14,6 @@ namespace Repositories.Entities
 
 
         [BsonElement]
-        public string description { get; set; }
+        public string description { get; set; } //Add image src
     }
 }

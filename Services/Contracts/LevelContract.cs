@@ -8,6 +8,12 @@ namespace Services.Contracts
 
         public string name { get; set; }
 
+        public string description { get; set; }
+
+        public string imageSrc { get; set; }
+
+        public int eventCount { get; set; }
+
         public int timeConstraint { get; set; }
 
         public int mistakes { get; set; }

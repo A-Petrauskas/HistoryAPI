@@ -17,7 +17,7 @@ namespace HistoryAPI.Controllers
             _levelsService = levelsService;
         }
 
-        [HttpPost]
+        [HttpPost] //ADD EVENTS TO EVENTS
         public async Task<ActionResult<LevelContract>> CreateLevelAsync([FromBody] LevelContract newLevel)
         {
             var newLevelContract = await _levelsService.CreateLevelAsync(newLevel);
