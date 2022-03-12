@@ -17,10 +17,10 @@ namespace HistoryAPI.Controllers
             _gameService = gameservice;
         }
 
-        [HttpPost("{levelid}")]
-        public async Task<ActionResult<string>> StartNewGameAsync(string levelid)
+        [HttpPost]
+        public async Task<ActionResult<string>> StartNewGameAsync([FromBody] LevelIdContract levelId)
         {
-            var gameId = await _gameService.StartNewGameAsync(levelid);
+            var gameId = await _gameService.StartNewGameAsync(levelId.levelId);
 
             return Ok(gameId); //change into created at??
         }
