@@ -4,6 +4,6 @@
     {
         public string description { get; set; }
 
-        //image or gif
+        public string imageSrc { get; set; }
     }
 }
