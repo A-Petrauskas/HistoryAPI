@@ -22,11 +22,11 @@ namespace HistoryAPI.Controllers
         {
             var gameId = await _gameService.StartNewGameAsync(levelId.levelId);
 
-            return Ok(gameId); //change into created at??
+            return Ok(gameId); //change into created at
         }
 
-        [HttpGet("{gameid}/event")] //TODO: Change into frontend cookie for user identification
-        public ActionResult<EventGameContract> GetNextEventAsync(string gameid)
+        [HttpPost("{gameid}")] //TODO: Change into frontend cookie for user identification
+        public ActionResult<GameState> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract )
         {
             var game = _gameService.CheckGameExists(gameid);
 
@@ -35,15 +35,28 @@ namespace HistoryAPI.Controllers
                 return NotFound();
             }
 
-            var nextEvent = _gameService.GetNextEvent(game);
 
-            if (nextEvent == null)
+            if (game.firstEventsSent == EnumFirstTwoEvents.baseEvent)
             {
-                // return _gameService.GetGameFinished();
-                return BadRequest(); //Testing
+                var firstGameState = _gameService.GenerateNewEvent(game, EnumFirstTwoEvents.baseEvent);
+                game.firstEventsSent = EnumFirstTwoEvents.firstUserEvent;
+
+                return Ok(firstGameState);
             }
 
-            return Ok(nextEvent);
+
+            if (game.firstEventsSent == EnumFirstTwoEvents.firstUserEvent)
+            {
+                var firstGameState = _gameService.GenerateNewEvent(game, EnumFirstTwoEvents.firstUserEvent);
+                game.firstEventsSent = EnumFirstTwoEvents.others;
+
+                return Ok(firstGameState);
+            }
+            
+
+            var gameState = _gameService.MakeGuessAsync(game, guessContract.placementIndex);
+
+            return Ok(gameState);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace HistoryAPI
             CreateMap<LevelEntity, LevelContract>()
              .ReverseMap();
 
-            CreateMap<EventContract, EventGameContract>();
+            CreateMap<EventContract, GameState>();
         }
     }
 }

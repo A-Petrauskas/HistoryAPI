@@ -9,12 +9,20 @@ namespace Services.Contracts
 
         public string levelid;
 
-        public List<EventContract> levelEvents;
+        public List<EventContract> levelEventsLeft;
 
         public List<EventContract> usedEvents;
 
         public int mistakes;
 
         public List<EventContract> mistakenEvents;
+
+        public GameState lastGameStateSent;
+
+        public EventContract lastEventContractSent;
+
+        public int mistakesAllowed;
+
+        public EnumFirstTwoEvents firstEventsSent = EnumFirstTwoEvents.baseEvent;
     }
 }

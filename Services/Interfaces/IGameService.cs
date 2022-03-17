@@ -1,4 +1,5 @@
 ﻿using Services.Contracts;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Interfaces
@@ -7,8 +8,10 @@ namespace Services.Interfaces
     {
         Task<string> StartNewGameAsync(string levelId);
 
-        EventGameContract GetNextEvent(GameInstanceContract game);
+        GameState MakeGuessAsync(GameInstanceContract game, int placementIndex);
 
         GameInstanceContract CheckGameExists(string gameId);
+
+        GameState GenerateNewEvent(GameInstanceContract game, EnumFirstTwoEvents firstTwoEvents);
     }
 }

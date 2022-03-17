@@ -4,6 +4,7 @@ using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Services
 {
@@ -25,40 +26,19 @@ namespace Services
         {
             var level = await _levelsService.GetLevelAsync(levelId);
 
-            GameInstanceContract gameInstance = new GameInstanceContract
+            var gameInstance = new GameInstanceContract
             {
                 gameId = Guid.NewGuid(),
-                levelEvents = level.Events,
+                levelEventsLeft = level.Events,
                 levelid = level.Id,
-                usedEvents = new List<EventContract>()
+                usedEvents = new List<EventContract>(),
+                mistakesAllowed = level.mistakes,
+                mistakenEvents = new List<EventContract>()
             };
 
             gameList.Add(gameInstance);
-            //Immediately send new event !!!!!!!!!!!!
+
             return gameInstance.gameId.ToString();
-        }
-
-
-        public EventGameContract GetNextEvent(GameInstanceContract game)
-        {
-            var eventList = game.levelEvents;
-
-            if (eventList.Count == 0)
-            {
-                return null;
-            }
-
-            var index = new Random().Next(eventList.Count);
-
-            var nextEvent = eventList[index];
-            game.usedEvents.Add(nextEvent); //SORT before finding if it is wrong
-
-            eventList.RemoveAt(index);
-            game.levelEvents = eventList;
-
-            var nextEventGameContract = _mapper.Map<EventGameContract>(nextEvent);
-
-            return nextEventGameContract;
         }
 
 
@@ -72,6 +52,163 @@ namespace Services
             }
 
             return game;
+        }
+
+
+        public GameState MakeGuessAsync(GameInstanceContract game, int placementIndex)
+        {
+            // Time requirement checks
+            var timeCheckedState = CheckTimeConstraint(game);
+
+            if (timeCheckedState.gameProgress == EnumGameProgress.lost)
+            {
+                return timeCheckedState;
+            }
+
+
+            // Placement correctness checks
+            var eventList = game.levelEventsLeft;
+
+            if (!isPlacementCorrect(game, placementIndex))
+            {
+                // Mistake limit checks
+                var mistakeCountedState = CheckMistakeCount(game);
+                if(mistakeCountedState.gameProgress == EnumGameProgress.lost)
+                {
+                    mistakeCountedState.mistakes++;
+
+                    return mistakeCountedState;
+                }
+
+                game.lastGameStateSent.mistakes++;
+
+                return game.lastGameStateSent;
+            }
+
+
+            // Finished game check
+            if (eventList.Count == 0)
+            {
+                return new GameState { gameProgress = EnumGameProgress.won };
+            }
+
+
+            var nextEventGameState = GenerateNewEvent(game, EnumFirstTwoEvents.others);
+
+            return nextEventGameState;
+        }
+
+
+        private GameState CheckMistakeCount (GameInstanceContract game)
+        {
+            if (game.mistakes >= game.mistakesAllowed)
+            {
+                return new GameState { gameProgress = EnumGameProgress.lost };
+            }
+
+            return game.lastGameStateSent;
+        }
+
+
+        private bool isPlacementCorrect(GameInstanceContract game, int placementIndex)
+        {
+            var placedEvents = new List<EventContract>(game.usedEvents);
+            var userPlacedEvent = game.lastEventContractSent;
+
+            placedEvents.Add(userPlacedEvent);
+
+            var sortedEvents = placedEvents.OrderBy(o => o.date).ToList();
+
+            // Check if its in the correct position
+            if (sortedEvents.IndexOf(userPlacedEvent) == placementIndex)
+            {
+                game.usedEvents = sortedEvents;
+
+                return true;
+            }
+
+            // Check if two items have the same date (relative order is not kept) 
+            var unsortedEvents = new List<EventContract>(game.usedEvents);
+            unsortedEvents.Insert(placementIndex, game.lastEventContractSent);
+
+            if (placementIndex == 0)
+            {
+                var eventRightDate = unsortedEvents[1].date;
+                if (eventRightDate == userPlacedEvent.date)
+                {
+                    game.usedEvents = sortedEvents;
+                    return true;
+                }
+                
+            }
+
+            else if (placementIndex == placedEvents.Count - 1)
+            {
+                var eventLeftDate = unsortedEvents[placementIndex - 1].date;
+                if (eventLeftDate == userPlacedEvent.date)
+                {
+                    game.usedEvents = sortedEvents;
+                    return true;
+                }
+            }
+
+            else
+            {
+                var eventLeftDateMiddle = sortedEvents[placementIndex - 1].date;
+                var eventRightDateMiddle = sortedEvents[placementIndex + 1].date;
+
+                if (eventLeftDateMiddle == userPlacedEvent.date || eventRightDateMiddle == userPlacedEvent.date)
+                {
+                    game.usedEvents = sortedEvents;
+                    return true;
+                }
+                
+            }
+            
+            //ONLY ADD UNIQUE MISTAKENEVENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            game.mistakes++;
+            game.mistakenEvents.Add(userPlacedEvent);
+
+            return false;
+        }
+
+
+        private GameState CheckTimeConstraint(GameInstanceContract game)
+        {
+            var gameState = new GameState
+            {
+                gameProgress = EnumGameProgress.stillPlaying
+            };
+
+            return gameState;
+        }
+
+
+        public GameState GenerateNewEvent(GameInstanceContract game, EnumFirstTwoEvents firstTwoEvents)
+        {
+            var eventList = game.levelEventsLeft;
+
+            var index = new Random().Next(eventList.Count);
+
+            var nextEvent = eventList[index];
+
+            eventList.RemoveAt(index);
+            game.levelEventsLeft = eventList;
+
+
+            var nextEventGameContract = _mapper.Map<GameState>(nextEvent);
+
+
+            if (firstTwoEvents == EnumFirstTwoEvents.baseEvent)
+            {
+                game.usedEvents.Add(nextEvent);
+            }
+
+
+            game.lastGameStateSent = nextEventGameContract;
+            game.lastEventContractSent = nextEvent;
+
+            return nextEventGameContract;
         }
     }
 }
