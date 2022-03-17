@@ -53,6 +53,8 @@ namespace Services
         {
             var newLevelEntity = _mapper.Map<LevelEntity>(newLevel);
 
+            newLevelEntity.eventCount = newLevelEntity.Events.Count;
+
             await _levelsRepository.CreateLevelAsync(newLevelEntity);
 
             await _eventsService.CreateEventsAsync(newLevelEntity.Events);
