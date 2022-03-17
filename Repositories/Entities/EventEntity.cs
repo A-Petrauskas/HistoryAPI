@@ -12,8 +12,10 @@ namespace Repositories.Entities
         [BsonElement]
         public int date { get; set; }
 
+        [BsonElement]
+        public string description { get; set; }
 
         [BsonElement]
-        public string description { get; set; } //Add image src
+        public string imageSrc { get; set; }
     }
 }

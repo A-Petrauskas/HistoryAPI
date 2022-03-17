@@ -1,4 +1,5 @@
-﻿using Services.Contracts;
+﻿using MongoDB.Driver;
+using Services.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +16,7 @@ namespace Services.Interfaces
         Task<LevelContract> CreateLevelAsync(LevelContract newLevel);
 
         Task<LevelContract> UpdateLevelAsync(LevelContract level);
+
+        Task<DeleteResult> RemoveLevelAsync(string id);
     }
 }

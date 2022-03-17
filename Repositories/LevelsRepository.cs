@@ -52,5 +52,12 @@ namespace Repositories
 
             return level;
         }
+
+        public async Task<DeleteResult> RemoveLevelAsync(string levelId)
+        {
+            var deleteResult = await _levels.DeleteOneAsync(level => level.Id == levelId);
+
+            return deleteResult;
+        }
     }
 }

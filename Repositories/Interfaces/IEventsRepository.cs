@@ -9,5 +9,7 @@ namespace Repositories
         Task<List<EventEntity>> GetAllAsync();
 
         Task<EventEntity> GetAsync(string id);
+
+        Task<List<EventEntity>> CreateEventsAsync(List<EventEntity> eventsToCreate);
     }
 }

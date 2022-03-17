@@ -17,7 +17,7 @@ namespace HistoryAPI.Controllers
             _levelsService = levelsService;
         }
 
-        [HttpPost] //ADD EVENTS TO EVENTS
+        [HttpPost]
         public async Task<ActionResult<LevelContract>> CreateLevelAsync([FromBody] LevelContract newLevel)
         {
             var newLevelContract = await _levelsService.CreateLevelAsync(newLevel);
@@ -31,6 +31,18 @@ namespace HistoryAPI.Controllers
             var updatedLevelContract = await _levelsService.UpdateLevelAsync(level);
 
             return Ok(updatedLevelContract); //Created at
+        }
+
+        [HttpDelete("{levelid}")]
+        public async Task<ActionResult> DeleteLevelAsync(string levelid)
+        {
+            var level = await _levelsService.GetLevelAsync(levelid);
+
+            if (level == null) return NotFound();
+
+            await _levelsService.RemoveLevelAsync(levelid);
+
+            return Ok();
         }
     }
 }

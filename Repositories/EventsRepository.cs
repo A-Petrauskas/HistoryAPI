@@ -30,5 +30,12 @@ namespace Repositories
 
             return await task.FirstOrDefaultAsync();
         }
+
+        public async Task<List<EventEntity>> CreateEventsAsync(List<EventEntity> eventsToCreate)
+        {
+            await _events.InsertManyAsync(eventsToCreate);
+
+            return eventsToCreate;
+        }
     }
 }

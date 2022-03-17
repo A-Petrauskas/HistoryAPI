@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MongoDB.Driver;
 using Repositories;
 using Repositories.Entities;
 using Services.Contracts;
@@ -12,10 +13,12 @@ namespace Services
     {
         private readonly ILevelsRepository _levelsRepository;
         private readonly IMapper _mapper;
+        private readonly IEventsService _eventsService;
 
-        public LevelsService(ILevelsRepository levelsRepository, IMapper mapper)
+        public LevelsService(ILevelsRepository levelsRepository, IMapper mapper, IEventsService eventsService)
         {
             _levelsRepository = levelsRepository;
+            _eventsService = eventsService;
             _mapper = mapper;
         }
 
@@ -52,7 +55,11 @@ namespace Services
 
             await _levelsRepository.CreateLevelAsync(newLevelEntity);
 
-            return newLevel;
+            await _eventsService.CreateEventsAsync(newLevelEntity.Events);
+
+            var newLevelContract = _mapper.Map<LevelContract>(newLevelEntity);
+
+            return newLevelContract;
         }
 
         public async Task<LevelContract> UpdateLevelAsync(LevelContract level)
@@ -62,6 +69,13 @@ namespace Services
             await _levelsRepository.UpdateLevelAsync(levelEntity);
 
             return level;
+        }
+
+        public async Task<DeleteResult> RemoveLevelAsync(string id)
+        {
+            var deleteResult = await _levelsRepository.RemoveLevelAsync(id);
+
+            return deleteResult;
         }
     }
 }

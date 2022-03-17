@@ -1,4 +1,5 @@
-﻿using Repositories.Entities;
+﻿using MongoDB.Driver;
+using Repositories.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +16,7 @@ namespace Repositories
         Task<LevelEntity> CreateLevelAsync(LevelEntity newLevel);
 
         Task<LevelEntity> UpdateLevelAsync(LevelEntity level);
+
+        Task<DeleteResult> RemoveLevelAsync(string levelId);
     }
 }

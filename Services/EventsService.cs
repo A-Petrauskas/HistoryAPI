@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Repositories;
+using Repositories.Entities;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
@@ -34,6 +35,13 @@ namespace Services
             var historyEventContract = _mapper.Map<EventContract>(historyEventEntity);
 
             return historyEventContract;
+        }
+
+        public async Task<List<EventEntity>> CreateEventsAsync(List<EventEntity> eventsToCreate)
+        {
+            await _eventsRepository.CreateEventsAsync(eventsToCreate);
+
+            return eventsToCreate;
         }
     }
 }

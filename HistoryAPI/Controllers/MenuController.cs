@@ -36,11 +36,11 @@ namespace HistoryAPI.Controllers
             await _levelsService.GetLevelsAsync();
 
 
-        [HttpGet("levels/byid/{id}")]
+        [HttpGet("levels/id/{id}")]
         public async Task<ActionResult<LevelContract>> GetLevelAsync(string id) =>
             await _levelsService.GetLevelAsync(id);
 
-        [HttpGet("levels/byname/{name}")]
+        [HttpGet("levels/name/{name}")]
         public async Task<ActionResult<LevelContract>> GetLevelByNameAsync(string name)
         {
             return await _levelsService.GetLevelByNameAsync(name);
