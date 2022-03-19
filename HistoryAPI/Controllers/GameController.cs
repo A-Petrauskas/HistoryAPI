@@ -22,7 +22,7 @@ namespace HistoryAPI.Controllers
         {
             var gameId = await _gameService.StartNewGameAsync(levelId.levelId);
 
-            return Ok(gameId); //change into created at
+            return Ok(gameId); // TODO: change into created at
         }
 
         [HttpPost("{gameid}")] //TODO: Change into frontend cookie for user identification

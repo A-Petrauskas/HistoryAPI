@@ -8,7 +8,6 @@
 
         public int mistakes { get; set; }
 
-
-        public EnumGameProgress gameProgress = EnumGameProgress.stillPlaying;
+        public EnumGameStatus gameStatus { get; set; }
     }
 }

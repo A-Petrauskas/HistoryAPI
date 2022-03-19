@@ -60,7 +60,7 @@ namespace Services
             // Time requirement checks
             var timeCheckedState = CheckTimeConstraint(game);
 
-            if (timeCheckedState.gameProgress == EnumGameProgress.lost)
+            if (timeCheckedState.gameStatus == EnumGameStatus.lost)
             {
                 return timeCheckedState;
             }
@@ -73,7 +73,7 @@ namespace Services
             {
                 // Mistake limit checks
                 var mistakeCountedState = CheckMistakeCount(game);
-                if(mistakeCountedState.gameProgress == EnumGameProgress.lost)
+                if(mistakeCountedState.gameStatus == EnumGameStatus.lost)
                 {
                     mistakeCountedState.mistakes++;
 
@@ -89,7 +89,7 @@ namespace Services
             // Finished game check
             if (eventList.Count == 0)
             {
-                return new GameState { gameProgress = EnumGameProgress.won };
+                return new GameState { gameStatus = EnumGameStatus.won };
             }
 
 
@@ -103,7 +103,7 @@ namespace Services
         {
             if (game.mistakes >= game.mistakesAllowed)
             {
-                return new GameState { gameProgress = EnumGameProgress.lost };
+                return new GameState { gameStatus = EnumGameStatus.lost };
             }
 
             return game.lastGameStateSent;
@@ -164,8 +164,8 @@ namespace Services
                 }
                 
             }
-            
-            //ONLY ADD UNIQUE MISTAKENEVENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            //TODO: ONLY ADD UNIQUE MISTAKENEVENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             game.mistakes++;
             game.mistakenEvents.Add(userPlacedEvent);
 
@@ -177,7 +177,7 @@ namespace Services
         {
             var gameState = new GameState
             {
-                gameProgress = EnumGameProgress.stillPlaying
+                gameStatus = EnumGameStatus.stillPlaying
             };
 
             return gameState;
