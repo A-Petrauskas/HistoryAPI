@@ -75,18 +75,16 @@ namespace Services
                 var mistakeCountedState = CheckMistakeCount(game);
                 if(mistakeCountedState.gameStatus == EnumGameStatus.lost)
                 {
-                    mistakeCountedState.mistakes++;
-
                     return mistakeCountedState;
                 }
 
-                game.lastGameStateSent.mistakes++;
+                game.lastGameStateSent.mistakes = game.mistakes;
 
                 return game.lastGameStateSent;
             }
 
 
-            // Finished game check
+            // Won game check
             if (eventList.Count == 0)
             {
                 return new GameState { gameStatus = EnumGameStatus.won };
@@ -103,7 +101,7 @@ namespace Services
         {
             if (game.mistakes >= game.mistakesAllowed)
             {
-                return new GameState { gameStatus = EnumGameStatus.lost };
+                return new GameState { gameStatus = EnumGameStatus.lost, mistakes = game.mistakes };
             }
 
             return game.lastGameStateSent;
@@ -196,7 +194,8 @@ namespace Services
             game.levelEventsLeft = eventList;
 
 
-            var nextEventGameContract = _mapper.Map<GameState>(nextEvent);
+            var nextEventGameState = _mapper.Map<GameState>(nextEvent);
+            nextEventGameState.mistakes = game.mistakes;
 
 
             if (firstTwoEvents == EnumFirstTwoEvents.baseEvent)
@@ -205,10 +204,10 @@ namespace Services
             }
 
 
-            game.lastGameStateSent = nextEventGameContract;
+            game.lastGameStateSent = nextEventGameState;
             game.lastEventContractSent = nextEvent;
 
-            return nextEventGameContract;
+            return nextEventGameState;
         }
     }
 }
