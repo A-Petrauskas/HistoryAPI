@@ -24,18 +24,8 @@ namespace HistoryAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("http://localhost:3000",
-                                                          "http://localhost:5000")
-                                      .AllowAnyHeader();
-                                  });
-            });
-
 
             // Adding Swagger documentation
             services.AddSwaggerGen(options =>
@@ -84,10 +74,13 @@ namespace HistoryAPI
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
 
-            // Enable CORS
-            app.UseCors();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
