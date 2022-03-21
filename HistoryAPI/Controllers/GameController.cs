@@ -25,8 +25,9 @@ namespace HistoryAPI.Controllers
             return Ok(gameId); // TODO: change into created at
         }
 
+
         [HttpPost("{gameid}")] //TODO: Change into frontend cookie for user identification
-        public ActionResult<GameState> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract )
+        public ActionResult<GameState> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract)
         {
             var game = _gameService.CheckGameExists(gameid);
 
@@ -52,11 +53,32 @@ namespace HistoryAPI.Controllers
 
                 return Ok(firstGameState);
             }
-            
+
 
             var gameState = _gameService.MakeGuessAsync(game, guessContract.placementIndex);
 
             return Ok(gameState);
+        }
+
+
+        [HttpGet("{gameid}/gameover")]
+        public ActionResult<GameOverStatsContract> GetGameOverStats(string gameid)
+        {
+            var game = _gameService.CheckGameExists(gameid);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            if (game.lastGameStateSent.gameStatus == EnumGameStatus.stillPlaying)
+            {
+                return NotFound();
+            }
+
+            var gameOverStats = _gameService.GetGameOverStats(game);
+
+            return Ok(gameOverStats);
         }
     }
 }

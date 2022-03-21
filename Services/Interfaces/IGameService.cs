@@ -1,5 +1,4 @@
 ﻿using Services.Contracts;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Interfaces
@@ -13,5 +12,7 @@ namespace Services.Interfaces
         GameInstanceContract CheckGameExists(string gameId);
 
         GameState GenerateNewEvent(GameInstanceContract game, EnumFirstTwoEvents firstTwoEvents);
+
+        GameOverStatsContract GetGameOverStats(GameInstanceContract gameid);
     }
 }

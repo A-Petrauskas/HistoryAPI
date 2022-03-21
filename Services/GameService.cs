@@ -3,8 +3,8 @@ using Services.Contracts;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -33,7 +33,8 @@ namespace Services
                 levelid = level.Id,
                 usedEvents = new List<EventContract>(),
                 mistakesAllowed = level.mistakes,
-                mistakenEvents = new List<EventContract>()
+                mistakenEvents = new List<EventContract>(),
+                lastGameStateSent = new GameState() { gameStatus = EnumGameStatus.stillPlaying }
             };
 
             gameList.Add(gameInstance);
@@ -62,6 +63,8 @@ namespace Services
 
             if (timeCheckedState.gameStatus == EnumGameStatus.lost)
             {
+                game.lastGameStateSent = timeCheckedState;
+
                 return timeCheckedState;
             }
 
@@ -73,8 +76,10 @@ namespace Services
             {
                 // Mistake limit checks
                 var mistakeCountedState = CheckMistakeCount(game);
-                if(mistakeCountedState.gameStatus == EnumGameStatus.lost)
+                if (mistakeCountedState.gameStatus == EnumGameStatus.lost)
                 {
+                    game.lastGameStateSent = mistakeCountedState;
+
                     return mistakeCountedState;
                 }
 
@@ -97,14 +102,15 @@ namespace Services
         }
 
 
-        private GameState CheckMistakeCount (GameInstanceContract game)
+        public GameOverStatsContract GetGameOverStats(GameInstanceContract game)
         {
-            if (game.mistakes >= game.mistakesAllowed)
+            var gameOverStats = new GameOverStatsContract
             {
-                return new GameState { gameStatus = EnumGameStatus.lost, mistakes = game.mistakes };
-            }
+                mistakes = game.mistakes,
+                mistakenEvents = game.mistakenEvents
+            };
 
-            return game.lastGameStateSent;
+            return gameOverStats;
         }
 
 
@@ -137,7 +143,7 @@ namespace Services
                     game.usedEvents = sortedEvents;
                     return true;
                 }
-                
+
             }
 
             else if (placementIndex == placedEvents.Count - 1)
@@ -160,7 +166,7 @@ namespace Services
                     game.usedEvents = sortedEvents;
                     return true;
                 }
-                
+
             }
 
             //TODO: ONLY ADD UNIQUE MISTAKENEVENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -168,6 +174,16 @@ namespace Services
             game.mistakenEvents.Add(userPlacedEvent);
 
             return false;
+        }
+
+        private GameState CheckMistakeCount(GameInstanceContract game)
+        {
+            if (game.mistakes >= game.mistakesAllowed)
+            {
+                return new GameState { gameStatus = EnumGameStatus.lost, mistakes = game.mistakes };
+            }
+
+            return game.lastGameStateSent;
         }
 
 
