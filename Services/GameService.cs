@@ -92,7 +92,11 @@ namespace Services
             // Won game check
             if (eventList.Count == 0)
             {
-                return new GameState { gameStatus = EnumGameStatus.won };
+                var gameState = new GameState { gameStatus = EnumGameStatus.won };
+
+                game.lastGameStateSent = gameState;
+
+                return gameState;
             }
 
 
@@ -169,9 +173,13 @@ namespace Services
 
             }
 
-            //TODO: ONLY ADD UNIQUE MISTAKENEVENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
             game.mistakes++;
-            game.mistakenEvents.Add(userPlacedEvent);
+
+            if (!game.mistakenEvents.Contains(userPlacedEvent))
+            {
+                game.mistakenEvents.Add(userPlacedEvent);
+            }
 
             return false;
         }
