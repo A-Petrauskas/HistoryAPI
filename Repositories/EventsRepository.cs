@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using Repositories.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Repositories
@@ -33,8 +34,17 @@ namespace Repositories
 
         public async Task<List<EventEntity>> CreateEventsAsync(List<EventEntity> eventsToCreate)
         {
-            await _events.InsertManyAsync(eventsToCreate);
+            var task = await _events.FindAsync<EventEntity>(_ => true);
 
+            var eventsInDB = await task.ToListAsync();
+
+            for (int i = 0; i < eventsToCreate.Count; i++)
+            {
+                if (!eventsInDB.Any(evnt => evnt.description == eventsToCreate[i].description &&
+                                    evnt.date == eventsToCreate[i].date))
+                    await _events.InsertOneAsync(eventsToCreate[i]);
+            }
+            
             return eventsToCreate;
         }
     }
