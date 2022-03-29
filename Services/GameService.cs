@@ -22,7 +22,7 @@ namespace Services
         }
 
 
-        public async Task<string> StartNewGameAsync(string levelId)
+        public async Task<GameStartContract> StartNewGameAsync(string levelId)
         {
             var level = await _levelsService.GetLevelAsync(levelId);
 
@@ -39,7 +39,14 @@ namespace Services
 
             gameList.Add(gameInstance);
 
-            return gameInstance.gameId.ToString();
+            var gameStartContract = new GameStartContract()
+            {
+                gameId = gameInstance.gameId.ToString(),
+                timeConstraint = level.timeConstraint,
+                mistakesAllowed = level.mistakes
+            };
+
+            return gameStartContract;
         }
 
 

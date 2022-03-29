@@ -18,11 +18,11 @@ namespace HistoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> StartNewGameAsync([FromBody] LevelIdContract levelId)
+        public async Task<ActionResult<GameStartContract>> StartNewGameAsync([FromBody] LevelIdContract levelId)
         {
-            var gameId = await _gameService.StartNewGameAsync(levelId.levelId);
+            var gameStartContract = await _gameService.StartNewGameAsync(levelId.levelId);
 
-            return Ok(gameId); // TODO: change into created at
+            return Ok(gameStartContract); // TODO: change into created at
         }
 
 

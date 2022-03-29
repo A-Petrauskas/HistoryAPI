@@ -5,7 +5,7 @@ namespace Services.Interfaces
 {
     public interface IGameService
     {
-        Task<string> StartNewGameAsync(string levelId);
+        Task<GameStartContract> StartNewGameAsync(string levelId);
 
         GameState MakeGuessAsync(GameInstanceContract game, int placementIndex);
 
