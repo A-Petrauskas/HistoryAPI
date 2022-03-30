@@ -169,8 +169,8 @@ namespace Services
 
             else
             {
-                var eventLeftDateMiddle = sortedEvents[placementIndex - 1].date;
-                var eventRightDateMiddle = sortedEvents[placementIndex + 1].date;
+                var eventLeftDateMiddle = unsortedEvents[placementIndex - 1].date;
+                var eventRightDateMiddle = unsortedEvents[placementIndex + 1].date;
 
                 if (eventLeftDateMiddle == userPlacedEvent.date || eventRightDateMiddle == userPlacedEvent.date)
                 {
