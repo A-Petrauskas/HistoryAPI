@@ -65,8 +65,8 @@ namespace Services
 
         public GameState MakeGuessAsync(GameInstanceContract game, int placementIndex)
         {
-            // Time requirement checks
-            var timeCheckedState = CheckTimeConstraint(game);
+            // Time constraint checks
+            var timeCheckedState = CheckTimeConstraint(placementIndex);
 
             if (timeCheckedState.gameStatus == EnumGameStatus.lost)
             {
@@ -202,11 +202,18 @@ namespace Services
         }
 
 
-        private GameState CheckTimeConstraint(GameInstanceContract game)
+        private GameState CheckTimeConstraint(int placementIndex)
         {
+            var gameStatus = EnumGameStatus.stillPlaying;
+
+            if (placementIndex == -1)
+            {
+                gameStatus = EnumGameStatus.lost;
+            }
+
             var gameState = new GameState
             {
-                gameStatus = EnumGameStatus.stillPlaying
+                gameStatus = gameStatus
             };
 
             return gameState;
