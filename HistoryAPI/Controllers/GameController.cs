@@ -36,6 +36,11 @@ namespace HistoryAPI.Controllers
                 return NotFound();
             }
 
+            if (game.lastGameStateSent.gameStatus != 0)
+            {
+                return game.lastGameStateSent;
+            }
+
 
             if (game.firstEventsSent == EnumFirstTwoEvents.baseEvent)
             {
