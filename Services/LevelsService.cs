@@ -4,6 +4,7 @@ using Repositories;
 using Repositories.Entities;
 using Services.Contracts;
 using Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -90,13 +91,13 @@ namespace Services
         private async Task<List<string>> SaveImages(CreationContract levelCreationContract, string path)
         {
             var levelPicture = levelCreationContract.image;
-            string imagesPath = Directory.GetParent(path).Parent.FullName + @"\images";
-            List<string> imageSrcs = new List<string>();
+            string imagesPath = Directory.GetParent(path).Parent.FullName + @"\history-react-app\public\Images";
+            List<string> imageNames = new List<string>();
 
             if (levelPicture.Length > 0)
             {
                 string filePath = Path.Combine(imagesPath, levelPicture.FileName);
-                imageSrcs.Add(filePath);
+                imageNames.Add(levelPicture.FileName);
 
                 using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -106,34 +107,44 @@ namespace Services
 
             foreach (CreationEventContract eventContract in levelCreationContract.events)
             {
-                if (eventContract.image.Length > 0)
+                if (!eventContract.image.Equals(null))
                 {
-                    string filePath = Path.Combine(imagesPath, eventContract.image.FileName);
-                    imageSrcs.Add(filePath);
-
-                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    if (eventContract.image.Length > 0)
                     {
-                        await eventContract.image.CopyToAsync(fileStream);
+                        string filePath = Path.Combine(imagesPath, eventContract.image.FileName);
+                        imageNames.Add(eventContract.image.FileName);
+
+                        using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await eventContract.image.CopyToAsync(fileStream);
+                        }
+                    }
+                    else
+                    {
+                        imageNames.Add(null);
                     }
                 }
                 else
                 {
-                    imageSrcs.Add(null);
+                    imageNames.Add(null);
                 }
             }
            
 
-            return imageSrcs;
+            return imageNames;
         }
 
-        private CreationContract AddImageSrcs(CreationContract levelCreationContract, List<string> imageSrcs)
+        private CreationContract AddImageSrcs(CreationContract levelCreationContract, List<string> imageName)
         {
-            levelCreationContract.imageSrc = imageSrcs[0];
-            imageSrcs.RemoveAt(0);
+            levelCreationContract.imageSrc = "/images/" + imageName[0];
+            imageName.RemoveAt(0);
 
-            for (int i = 0; i <imageSrcs.Count; i++)
+            for (int i = 0; i <imageName.Count; i++)
             {
-                levelCreationContract.events[i].imageSrc = imageSrcs[i];
+                if (imageName[i] != null)
+                {
+                    levelCreationContract.events[i].imageSrc = "/images/" + imageName[i];
+                }
             }
 
             return levelCreationContract;
