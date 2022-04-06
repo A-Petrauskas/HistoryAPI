@@ -5,6 +5,7 @@ using Repositories.Entities;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Services
@@ -49,17 +50,22 @@ namespace Services
             return levelContract;
         }
 
-        public async Task<LevelContract> CreateLevelAsync(LevelContract newLevel)
+        public async Task<LevelContract> CreateLevelAsync(CreationContract newLevel, string path)
         {
-            var newLevelEntity = _mapper.Map<LevelEntity>(newLevel);
+            var listOfImagesSrcs = await SaveImages(newLevel, path);
 
-            newLevelEntity.eventCount = newLevelEntity.Events.Count;
+            var creationContract = AddImageSrcs(newLevel, listOfImagesSrcs);
+
+            var newLevelEntity = _mapper.Map<LevelEntity>(creationContract);
+
+            newLevelEntity.eventCount = newLevelEntity.events.Count;
 
             await _levelsRepository.CreateLevelAsync(newLevelEntity);
 
-            await _eventsService.CreateEventsAsync(newLevelEntity.Events);
+            await _eventsService.CreateEventsAsync(newLevelEntity.events);
 
             var newLevelContract = _mapper.Map<LevelContract>(newLevelEntity);
+
 
             return newLevelContract;
         }
@@ -78,6 +84,59 @@ namespace Services
             var deleteResult = await _levelsRepository.RemoveLevelAsync(id);
 
             return deleteResult;
+        }
+
+
+        private async Task<List<string>> SaveImages(CreationContract levelCreationContract, string path)
+        {
+            var levelPicture = levelCreationContract.image;
+            string imagesPath = Directory.GetParent(path).Parent.FullName + @"\images";
+            List<string> imageSrcs = new List<string>();
+
+            if (levelPicture.Length > 0)
+            {
+                string filePath = Path.Combine(imagesPath, levelPicture.FileName);
+                imageSrcs.Add(filePath);
+
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await levelPicture.CopyToAsync(fileStream);
+                }
+            }
+
+            foreach (CreationEventContract eventContract in levelCreationContract.events)
+            {
+                if (eventContract.image.Length > 0)
+                {
+                    string filePath = Path.Combine(imagesPath, eventContract.image.FileName);
+                    imageSrcs.Add(filePath);
+
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await eventContract.image.CopyToAsync(fileStream);
+                    }
+                }
+                else
+                {
+                    imageSrcs.Add(null);
+                }
+            }
+           
+
+            return imageSrcs;
+        }
+
+        private CreationContract AddImageSrcs(CreationContract levelCreationContract, List<string> imageSrcs)
+        {
+            levelCreationContract.imageSrc = imageSrcs[0];
+            imageSrcs.RemoveAt(0);
+
+            for (int i = 0; i <imageSrcs.Count; i++)
+            {
+                levelCreationContract.events[i].imageSrc = imageSrcs[i];
+            }
+
+            return levelCreationContract;
         }
     }
 }

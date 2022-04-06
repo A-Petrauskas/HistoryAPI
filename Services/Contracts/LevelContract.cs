@@ -22,6 +22,6 @@ namespace Services.Contracts
 
         public string highScoreUserId { get; set; }
 
-        public List<EventContract> Events { get; set; }
+        public List<EventContract> events { get; set; }
     }
 }

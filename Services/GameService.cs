@@ -29,7 +29,7 @@ namespace Services
             var gameInstance = new GameInstanceContract
             {
                 gameId = Guid.NewGuid(),
-                levelEventsLeft = level.Events,
+                levelEventsLeft = level.events,
                 levelid = level.Id,
                 usedEvents = new List<EventContract>(),
                 mistakesAllowed = level.mistakes,

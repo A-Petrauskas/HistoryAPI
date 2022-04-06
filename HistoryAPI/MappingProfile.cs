@@ -15,6 +15,12 @@ namespace HistoryAPI
              .ReverseMap();
 
             CreateMap<EventContract, GameState>();
+
+            CreateMap<CreationContract, LevelEntity>()
+                .ReverseMap();
+
+            CreateMap<CreationEventContract, EventEntity>()
+                .ReverseMap();
         }
     }
 }

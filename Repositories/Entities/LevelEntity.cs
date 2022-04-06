@@ -35,6 +35,6 @@ namespace Repositories.Entities
         public string highScoreUserId { get; set; }
 
         [BsonElement]
-        public List<EventEntity> Events { get; set; }
+        public List<EventEntity> events { get; set; }
     }
 }

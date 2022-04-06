@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Services.Interfaces;
 using System.Threading.Tasks;
@@ -11,18 +12,20 @@ namespace HistoryAPI.Controllers
     public class LevelCreationController : ControllerBase
     {
         private readonly ILevelsService _levelsService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public LevelCreationController(ILevelsService levelsService)
+        public LevelCreationController(ILevelsService levelsService, IWebHostEnvironment webHostEnvironment)
         {
             _levelsService = levelsService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
-        public async Task<ActionResult<LevelContract>> CreateLevelAsync([FromBody] LevelContract newLevel)
+        public async Task<ActionResult<LevelContract>> CreateLevelAsync([FromForm] CreationContract newLevel)
         {
-            var newLevelContract = await _levelsService.CreateLevelAsync(newLevel);
+            var newLevelContract = await _levelsService.CreateLevelAsync(newLevel, _webHostEnvironment.ContentRootPath);
 
-            return Ok(newLevelContract); //Created at 
+            return Ok(newLevelContract); //TODO: Created at 
         }
 
         [HttpPut]
@@ -30,7 +33,7 @@ namespace HistoryAPI.Controllers
         {
             var updatedLevelContract = await _levelsService.UpdateLevelAsync(level);
 
-            return Ok(updatedLevelContract); //Created at
+            return Ok(updatedLevelContract); //TODO: Created at
         }
 
         [HttpDelete("{levelid}")]
