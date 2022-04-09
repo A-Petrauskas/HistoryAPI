@@ -107,7 +107,7 @@ namespace Services
 
             foreach (CreationEventContract eventContract in levelCreationContract.events)
             {
-                if (!eventContract.image.Equals(null))
+                if (eventContract.image != null)
                 {
                     if (eventContract.image.Length > 0)
                     {
