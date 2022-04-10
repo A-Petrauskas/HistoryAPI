@@ -104,8 +104,10 @@ namespace Services
             {
                 if (levelPicture.Length > 0)
                 {
-                    string filePath = Path.Combine(imagesPath, levelPicture.FileName);
-                    imageNames.Add(levelPicture.FileName);
+                    var extension = levelPicture.FileName.Substring(levelPicture.FileName.LastIndexOf('.'));
+                    var pictureName = Guid.NewGuid().ToString() + extension;
+                    string filePath = Path.Combine(imagesPath, pictureName);
+                    imageNames.Add(pictureName);
 
                     using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                     {
@@ -120,8 +122,10 @@ namespace Services
                 {
                     if (eventContract.image.Length > 0)
                     {
-                        string filePath = Path.Combine(imagesPath, eventContract.image.FileName);
-                        imageNames.Add(eventContract.image.FileName);
+                        var extension = eventContract.image.FileName.Substring(eventContract.image.FileName.LastIndexOf('.'));
+                        var pictureName = Guid.NewGuid().ToString() + extension;
+                        string filePath = Path.Combine(imagesPath, pictureName);
+                        imageNames.Add(pictureName);
 
                         using (Stream fileStream = new FileStream(filePath, FileMode.Create))
                         {
