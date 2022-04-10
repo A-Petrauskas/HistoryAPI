@@ -7,6 +7,7 @@ using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services
@@ -61,6 +62,11 @@ namespace Services
 
             newLevelEntity.eventCount = newLevelEntity.events.Count;
 
+            if (await DuplicateExists(newLevelEntity))
+            {
+                return null;
+            }
+
             await _levelsRepository.CreateLevelAsync(newLevelEntity);
 
             await _eventsService.CreateEventsAsync(newLevelEntity.events);
@@ -94,14 +100,17 @@ namespace Services
             string imagesPath = Directory.GetParent(path).Parent.FullName + @"\history-react-app\public\Images";
             List<string> imageNames = new List<string>();
 
-            if (levelPicture.Length > 0)
+            if (levelPicture != null)
             {
-                string filePath = Path.Combine(imagesPath, levelPicture.FileName);
-                imageNames.Add(levelPicture.FileName);
-
-                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                if (levelPicture.Length > 0)
                 {
-                    await levelPicture.CopyToAsync(fileStream);
+                    string filePath = Path.Combine(imagesPath, levelPicture.FileName);
+                    imageNames.Add(levelPicture.FileName);
+
+                    using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await levelPicture.CopyToAsync(fileStream);
+                    }
                 }
             }
 
@@ -148,6 +157,17 @@ namespace Services
             }
 
             return levelCreationContract;
+        }
+
+        private async Task<bool> DuplicateExists(LevelEntity levelToCreate)
+        {
+            var allLevels = await _levelsRepository.GetAllAsync();
+
+            var containsItem = allLevels.Any(level => level.description == levelToCreate.description
+                && level.name == levelToCreate.name && level.timeConstraint == levelToCreate.timeConstraint
+                && level.mistakes == levelToCreate.mistakes && level.eventCount == levelToCreate.eventCount);
+
+            return containsItem;
         }
     }
 }

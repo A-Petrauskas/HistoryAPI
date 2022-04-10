@@ -25,6 +25,11 @@ namespace HistoryAPI.Controllers
         {
             var newLevelContract = await _levelsService.CreateLevelAsync(newLevel, _webHostEnvironment.ContentRootPath);
 
+            if (newLevelContract == null)
+            {
+                return Conflict();
+            }
+
             return Ok(newLevelContract); //TODO: Created at 
         }
 
