@@ -12,7 +12,7 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract {date = "1"};
+            var eventToPlace = new EventContract { date = "1" };
 
             var eventsPlaced = new List<EventContract>
             {

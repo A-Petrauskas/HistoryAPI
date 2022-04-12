@@ -184,7 +184,7 @@ namespace Services
                 var eventLeftDateMiddle = Int32.Parse(unsortedEvents[placementIndex - 1].date);
                 var eventRightDateMiddle = Int32.Parse(unsortedEvents[placementIndex + 1].date);
 
-                if (eventLeftDateMiddle == Int32.Parse(userPlacedEvent.date) 
+                if (eventLeftDateMiddle == Int32.Parse(userPlacedEvent.date)
                     || eventRightDateMiddle == Int32.Parse(userPlacedEvent.date))
                 {
                     game.usedEvents = sortedEvents;
@@ -193,7 +193,7 @@ namespace Services
 
             }
 
-            
+
             game.mistakes++;
 
             if (!game.mistakenEvents.Contains(userPlacedEvent))

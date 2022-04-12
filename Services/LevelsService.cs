@@ -142,7 +142,7 @@ namespace Services
                     imageNames.Add(null);
                 }
             }
-           
+
 
             return imageNames;
         }
@@ -152,7 +152,7 @@ namespace Services
             levelCreationContract.imageSrc = "/images/" + imageName[0];
             imageName.RemoveAt(0);
 
-            for (int i = 0; i <imageName.Count; i++)
+            for (int i = 0; i < imageName.Count; i++)
             {
                 if (imageName[i] != null)
                 {

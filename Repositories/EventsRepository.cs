@@ -44,7 +44,7 @@ namespace Repositories
                                     evnt.date == eventsToCreate[i].date))
                     await _events.InsertOneAsync(eventsToCreate[i]);
             }
-            
+
             return eventsToCreate;
         }
     }
