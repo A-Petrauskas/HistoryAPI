@@ -34,7 +34,8 @@ namespace Services
                 usedEvents = new List<EventContract>(),
                 mistakesAllowed = level.mistakes,
                 mistakenEvents = new List<EventContract>(),
-                lastGameStateSent = new GameState() { gameStatus = EnumGameStatus.stillPlaying }
+                lastGameStateSent = new GameState() { gameStatus = EnumGameStatus.stillPlaying },
+                fullDates = level.fullDates
             };
 
             gameList.Add(gameInstance);
@@ -79,7 +80,7 @@ namespace Services
             // Placement correctness checks
             var eventList = game.levelEventsLeft;
 
-            if (!isPlacementCorrect(game, placementIndex))
+            if (!IsPlacementCorrect(game, placementIndex))
             {
                 // Mistake limit checks
                 var mistakeCountedState = CheckMistakeCount(game);
@@ -125,14 +126,25 @@ namespace Services
         }
 
 
-        private bool isPlacementCorrect(GameInstanceContract game, int placementIndex)
+        public bool IsPlacementCorrect(GameInstanceContract game, int placementIndex)
+        {
+            if (game.fullDates)
+            {
+                // TODO: IsPlacementCorrectFullDates
+            }
+
+            return IsPlacementCorrectYearOnly(game, placementIndex);
+        }
+
+
+        public bool IsPlacementCorrectYearOnly(GameInstanceContract game, int placementIndex)
         {
             var placedEvents = new List<EventContract>(game.usedEvents);
             var userPlacedEvent = game.lastEventContractSent;
 
             placedEvents.Add(userPlacedEvent);
 
-            var sortedEvents = placedEvents.OrderBy(o => o.date).ToList();
+            var sortedEvents = placedEvents.OrderBy(o => Int32.Parse(o.date)).ToList();
 
             // Check if its in the correct position
             if (sortedEvents.IndexOf(userPlacedEvent) == placementIndex)
@@ -148,8 +160,8 @@ namespace Services
 
             if (placementIndex == 0)
             {
-                var eventRightDate = unsortedEvents[1].date;
-                if (eventRightDate == userPlacedEvent.date)
+                var eventRightDate = Int32.Parse(unsortedEvents[1].date);
+                if (eventRightDate == Int32.Parse(userPlacedEvent.date))
                 {
                     game.usedEvents = sortedEvents;
                     return true;
@@ -159,8 +171,8 @@ namespace Services
 
             else if (placementIndex == placedEvents.Count - 1)
             {
-                var eventLeftDate = unsortedEvents[placementIndex - 1].date;
-                if (eventLeftDate == userPlacedEvent.date)
+                var eventLeftDate = Int32.Parse(unsortedEvents[placementIndex - 1].date);
+                if (eventLeftDate == Int32.Parse(userPlacedEvent.date))
                 {
                     game.usedEvents = sortedEvents;
                     return true;
@@ -169,10 +181,11 @@ namespace Services
 
             else
             {
-                var eventLeftDateMiddle = unsortedEvents[placementIndex - 1].date;
-                var eventRightDateMiddle = unsortedEvents[placementIndex + 1].date;
+                var eventLeftDateMiddle = Int32.Parse(unsortedEvents[placementIndex - 1].date);
+                var eventRightDateMiddle = Int32.Parse(unsortedEvents[placementIndex + 1].date);
 
-                if (eventLeftDateMiddle == userPlacedEvent.date || eventRightDateMiddle == userPlacedEvent.date)
+                if (eventLeftDateMiddle == Int32.Parse(userPlacedEvent.date) 
+                    || eventRightDateMiddle == Int32.Parse(userPlacedEvent.date))
                 {
                     game.usedEvents = sortedEvents;
                     return true;
@@ -191,7 +204,7 @@ namespace Services
             return false;
         }
 
-        private GameState CheckMistakeCount(GameInstanceContract game)
+        public GameState CheckMistakeCount(GameInstanceContract game)
         {
             if (game.mistakes >= game.mistakesAllowed)
             {
@@ -202,7 +215,7 @@ namespace Services
         }
 
 
-        private GameState CheckTimeConstraint(GameInstanceContract game, int placementIndex)
+        public GameState CheckTimeConstraint(GameInstanceContract game, int placementIndex)
         {
             var gameStatus = EnumGameStatus.stillPlaying;
 

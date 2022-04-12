@@ -23,5 +23,7 @@ namespace Services.Contracts
         public string highScoreUserId { get; set; }
 
         public List<EventContract> events { get; set; }
+
+        public bool fullDates { get; set; }
     }
 }

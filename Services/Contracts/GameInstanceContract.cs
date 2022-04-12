@@ -24,5 +24,7 @@ namespace Services.Contracts
         public int mistakesAllowed;
 
         public EnumFirstTwoEvents firstEventsSent = EnumFirstTwoEvents.baseEvent;
+
+        public bool fullDates;
     }
 }

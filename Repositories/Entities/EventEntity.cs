@@ -10,7 +10,7 @@ namespace Repositories.Entities
         public string Id { get; set; }
 
         [BsonElement]
-        public int date { get; set; }
+        public string date { get; set; }
 
         [BsonElement]
         public string description { get; set; }

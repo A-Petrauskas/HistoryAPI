@@ -36,5 +36,8 @@ namespace Repositories.Entities
 
         [BsonElement]
         public List<EventEntity> events { get; set; }
+
+        [BsonElement]
+        public bool fullDates { get; set; }
     }
 }

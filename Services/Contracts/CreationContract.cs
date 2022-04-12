@@ -18,5 +18,7 @@ namespace Services.Contracts
         public List<CreationEventContract> events { get; set; }
 
         public IFormFile image { get; set; }
+
+        public bool fullDates { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace Services.Contracts
 {
     public class CreationEventContract
     {
-        public int date { get; set; }
+        public string date { get; set; }
 
         public string description { get; set; }
 
