@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Services.Tests
 {
-    public class GameServiceYearOnlyTests
+    public class GameServiceDateTimeTests
     {
         [Fact]
         public void Check_OneEventPlacement_Incorrect()
@@ -12,11 +12,11 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "1" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "0"}
+                new EventContract {date = "123-02-01"}
             };
 
             var game = new GameInstanceContract
@@ -24,7 +24,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 1;
@@ -48,11 +48,11 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "1" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "0"}
+                new EventContract {date = "123-02-01"}
             };
 
             var game = new GameInstanceContract
@@ -60,7 +60,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -84,15 +84,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "2021-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "1"},
-                new EventContract {date = "2"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "2-12-01"},
+                new EventContract {date = "1789-09-07"},
+                new EventContract {date = "1855-02-03"},
+                new EventContract {date = "2021-02-04"},
+                new EventContract {date = "2022-02-03"}
             };
 
             var game = new GameInstanceContract
@@ -100,7 +100,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 1;
@@ -124,13 +124,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "2021-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "1"},
-                new EventContract {date = "2"}
+                new EventContract {date = "2-12-01"},
+                new EventContract {date = "1789-09-07"},
+                new EventContract {date = "1855-02-03"},
+                new EventContract {date = "2021-02-04"},
+                new EventContract {date = "2022-02-03"}
             };
 
             var game = new GameInstanceContract
@@ -138,7 +140,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -162,15 +164,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "3"},
-                new EventContract {date = "3"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "0020-05-01"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
+                new EventContract {date = "2021-02-03"}
             };
 
             var game = new GameInstanceContract
@@ -178,7 +180,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -202,15 +204,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "3"},
-                new EventContract {date = "3"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "0020-05-01"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
+                new EventContract {date = "2021-02-03"}
             };
 
             var game = new GameInstanceContract
@@ -218,7 +220,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -242,15 +244,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "3"},
-                new EventContract {date = "3"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "0020-05-01"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
+                new EventContract {date = "2021-02-03"}
             };
 
             var game = new GameInstanceContract
@@ -258,7 +260,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -282,12 +284,12 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "3"},
-                new EventContract {date = "5"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
             };
 
             var game = new GameInstanceContract
@@ -295,7 +297,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
@@ -319,12 +321,12 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "5" };
+            var eventToPlace = new EventContract { date = "2021-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "3"},
-                new EventContract {date = "5"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
             };
 
             var game = new GameInstanceContract
@@ -332,14 +334,14 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 0;
             var expectedMistakenEvents = new List<EventContract>();
 
             // Act
-            gameService.IsPlacementCorrect(game, 2); //Checking 2 positions (relative order)
+            gameService.IsPlacementCorrect(game, 1); //Checking 2 positions (relative order)
 
             var actualMistakes = game.mistakes;
             var actualMistakenEvents = game.mistakenEvents;
@@ -356,12 +358,12 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "3"},
-                new EventContract {date = "5"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
             };
 
             var game = new GameInstanceContract
@@ -369,7 +371,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 1;
@@ -393,12 +395,12 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "5" };
+            var eventToPlace = new EventContract { date = "2021-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "3"},
-                new EventContract {date = "5"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
             };
 
             var game = new GameInstanceContract
@@ -406,7 +408,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 1;
@@ -430,15 +432,15 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace = new EventContract { date = "3" };
+            var eventToPlace = new EventContract { date = "123-02-03" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "3"},
-                new EventContract {date = "3"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "0020-05-01"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-03"},
+                new EventContract {date = "2021-02-08"}
             };
 
             var game = new GameInstanceContract
@@ -446,7 +448,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes = 1;
@@ -470,16 +472,16 @@ namespace Services.Tests
             // Arrange
             var gameService = new GameService(null, null);
 
-            var eventToPlace1 = new EventContract { date = "3" };
-            var eventToPlace2 = new EventContract { date = "5" };
+            var eventToPlace1 = new EventContract { date = "123-02-03" };
+            var eventToPlace2 = new EventContract { date = "2022-03-08" };
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "-2"},
-                new EventContract {date = "3"},
-                new EventContract {date = "3"},
-                new EventContract {date = "4"},
-                new EventContract {date = "10"}
+                new EventContract {date = "0020-05-01"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "123-02-03"},
+                new EventContract {date = "2021-02-08"},
+                new EventContract {date = "2022-02-08"}
             };
 
             var game = new GameInstanceContract
@@ -487,7 +489,7 @@ namespace Services.Tests
                 mistakenEvents = new List<EventContract>(),
                 lastEventContractSent = eventToPlace1,
                 usedEvents = eventsPlaced,
-                fullDates = false
+                fullDates = true
             };
 
             var expectedMistakes1 = 1;
