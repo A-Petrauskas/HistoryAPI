@@ -18,5 +18,7 @@ namespace Services.Interfaces
         Task<LevelContract> UpdateLevelAsync(LevelContract level);
 
         Task<DeleteResult> RemoveLevelAsync(string id);
+
+        Task<LevelContract> GetLevelNoBCAsync(string id);
     }
 }

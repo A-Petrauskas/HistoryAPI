@@ -25,7 +25,9 @@ namespace Services
 
             var allEventsContract = _mapper.Map<List<EventContract>>(allEventsEntity);
 
-            return allEventsContract;
+            var allEventsWithBC = ChangeEventDatesToBC(allEventsContract);
+
+            return allEventsWithBC;
         }
 
         public async Task<EventContract> GetEventAsync(string id)
@@ -42,6 +44,22 @@ namespace Services
             await _eventsRepository.CreateEventsAsync(eventsToCreate);
 
             return eventsToCreate;
+        }
+
+
+        public List<EventContract> ChangeEventDatesToBC(List<EventContract> events)
+        {
+            var eventsWithBC = new List<EventContract>(events);
+
+            foreach (EventContract levelEvent in eventsWithBC)
+            {
+                if (levelEvent.date[0] == '-')
+                {
+                    levelEvent.date = levelEvent.date.Remove(0, 1) + " BC";
+                }
+            }
+
+            return eventsWithBC;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Services
 
         public async Task<GameStartContract> StartNewGameAsync(string levelId)
         {
-            var level = await _levelsService.GetLevelAsync(levelId);
+            var level = await _levelsService.GetLevelNoBCAsync(levelId);
 
             var gameInstance = new GameInstanceContract
             {
@@ -116,10 +116,12 @@ namespace Services
 
         public GameOverStatsContract GetGameOverStats(GameInstanceContract game)
         {
+            var eventsWithBC = ChangeEventDatesToBC(game);
+
             var gameOverStats = new GameOverStatsContract
             {
                 mistakes = game.mistakes,
-                mistakenEvents = game.mistakenEvents
+                mistakenEvents = eventsWithBC
             };
 
             return gameOverStats;
@@ -329,6 +331,27 @@ namespace Services
             }
 
             return false;
+        }
+
+
+        public List<EventContract> ChangeEventDatesToBC(GameInstanceContract game)
+        {
+            if (game.fullDates)
+            {
+                return game.mistakenEvents;
+            }
+
+            var eventsWithBC = new List<EventContract>(game.mistakenEvents);
+
+            foreach (EventContract levelEvent in eventsWithBC)
+            {
+                if (levelEvent.date.Contains('-'))
+                {
+                    levelEvent.date = levelEvent.date.Remove(0, 1) + " BC";
+                }
+            }
+
+            return eventsWithBC;
         }
     }
 }

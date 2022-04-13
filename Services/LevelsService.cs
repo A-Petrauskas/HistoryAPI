@@ -31,10 +31,23 @@ namespace Services
 
             var allLevelsContract = _mapper.Map<List<LevelContract>>(allLevelsEntity);
 
-            return allLevelsContract;
+            var allLevelsWithBC = ChangeMinusDatesLevelsToBC(allLevelsContract);
+
+            return allLevelsWithBC;
         }
 
         public async Task<LevelContract> GetLevelAsync(string id)
+        {
+            var levelEntity = await _levelsRepository.GetAsync(id);
+
+            var levelContract = _mapper.Map<LevelContract>(levelEntity);
+
+            var newLevelWithBC = ChangeMinusDatesToBC(levelContract);
+
+            return newLevelWithBC;
+        }
+
+        public async Task<LevelContract> GetLevelNoBCAsync(string id)
         {
             var levelEntity = await _levelsRepository.GetAsync(id);
 
@@ -49,7 +62,9 @@ namespace Services
 
             var levelContract = _mapper.Map<LevelContract>(levelEntity);
 
-            return levelContract;
+            var newLevelWithBC = ChangeMinusDatesToBC(levelContract);
+
+            return newLevelWithBC;
         }
 
         public async Task<LevelContract> CreateLevelAsync(CreationContract newLevel, string path)
@@ -67,14 +82,17 @@ namespace Services
                 return null;
             }
 
-            await _levelsRepository.CreateLevelAsync(newLevelEntity);
+            var levelWithoutBC = ChangeBCToIntString(newLevelEntity);
 
-            await _eventsService.CreateEventsAsync(newLevelEntity.events);
+            await _levelsRepository.CreateLevelAsync(levelWithoutBC);
 
-            var newLevelContract = _mapper.Map<LevelContract>(newLevelEntity);
+            await _eventsService.CreateEventsAsync(levelWithoutBC.events);
 
+            var newLevelContract = _mapper.Map<LevelContract>(levelWithoutBC);
 
-            return newLevelContract;
+            var newLevelWithBC = ChangeMinusDatesToBC(newLevelContract);
+
+            return newLevelWithBC;
         }
 
         public async Task<LevelContract> UpdateLevelAsync(LevelContract level)
@@ -83,7 +101,9 @@ namespace Services
 
             await _levelsRepository.UpdateLevelAsync(levelEntity);
 
-            return level;
+            var newLevelWithBC = ChangeMinusDatesToBC(level);
+
+            return newLevelWithBC;
         }
 
         public async Task<DeleteResult> RemoveLevelAsync(string id)
@@ -91,6 +111,45 @@ namespace Services
             var deleteResult = await _levelsRepository.RemoveLevelAsync(id);
 
             return deleteResult;
+        }
+
+
+        private LevelContract ChangeMinusDatesToBC(LevelContract level)
+        {
+            if (level.fullDates)
+            {
+                return level;
+            }
+
+            foreach (EventContract levelEvent in level.events)
+            {
+                if (levelEvent.date.Contains('-'))
+                {
+                    levelEvent.date = levelEvent.date.Remove(0, 1) + " BC";
+                }
+            }
+
+            return level;
+        }
+        private List<LevelContract> ChangeMinusDatesLevelsToBC(List<LevelContract> levels)
+        {
+            var levelsWithBC = new List<LevelContract>(levels);
+
+            foreach (LevelContract level in levelsWithBC)
+            {
+                if (!level.fullDates)
+                {
+                    foreach (EventContract levelEvent in level.events)
+                    {
+                        if (levelEvent.date.Contains('-'))
+                        {
+                            levelEvent.date = levelEvent.date.Remove(0, 1) + " BC";
+                        }
+                    }
+                }
+            }
+
+            return levelsWithBC;
         }
 
 
@@ -172,6 +231,24 @@ namespace Services
                 && level.mistakes == levelToCreate.mistakes && level.eventCount == levelToCreate.eventCount);
 
             return containsItem;
+        }
+
+        private LevelEntity ChangeBCToIntString (LevelEntity level)
+        {
+            if (level.fullDates)
+            {
+                return level;
+            }
+
+            foreach(EventEntity levelEvent in level.events)
+            {
+                if (levelEvent.date.Contains("BC"))
+                {
+                    levelEvent.date = "-" + levelEvent.date.Substring(0, levelEvent.date.Length - 3);
+                }
+            }
+
+            return level;
         }
     }
 }
