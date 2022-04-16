@@ -90,12 +90,11 @@ namespace HistoryAPI
 
             app.UseSwagger(options =>
             {
-                options.RouteTemplate = "history/swagger/{documentname}/swagger.json";
+                options.RouteTemplate = "api.historygame/swagger/{documentname}/swagger.json";
             });
             app.UseSwaggerUI(options =>
             {
-                options.RoutePrefix = "history/swagger";
-                options.SwaggerEndpoint("../swagger/v1/swagger.json", "History Timeline API");
+                options.RoutePrefix = "api.historygame/swagger";
             });
         }
     }

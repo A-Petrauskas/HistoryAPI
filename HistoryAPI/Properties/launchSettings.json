@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": false,
-      "launchUrl": "history/swagger",
+      "launchUrl": "api.historygame/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "HistoryAPI": {
       "commandName": "Project",
       "launchBrowser": false,
-      "launchUrl": "history/swagger",
+      "launchUrl": "api.historygame/swagger",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
