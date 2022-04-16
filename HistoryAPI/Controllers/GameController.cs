@@ -26,7 +26,7 @@ namespace HistoryAPI.Controllers
         }
 
 
-        [HttpPost("{gameid}")] //TODO: Change into frontend cookie for user identification
+        [HttpPost("{gameid}/guess")]
         public ActionResult<GameState> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract)
         {
             var game = _gameService.CheckGameExists(gameid);
