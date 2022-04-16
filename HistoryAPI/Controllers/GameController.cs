@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HistoryAPI.Controllers
 {
-    [Route("history/game")]
+    [Route("game")]
     [Produces("application/json")]
     [ApiController]
     public class GameController : ControllerBase
@@ -22,7 +22,7 @@ namespace HistoryAPI.Controllers
         {
             var gameStartContract = await _gameService.StartNewGameAsync(levelId.levelId);
 
-            return Ok(gameStartContract); // TODO: change into created at
+            return Ok(gameStartContract);
         }
 
 

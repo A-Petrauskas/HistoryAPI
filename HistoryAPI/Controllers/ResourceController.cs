@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace HistoryAPI.Controllers
 {
-    [Route("history")]
+    [Route("")]
     [Produces("application/json")]
     [ApiController]
-    public class MenuController : ControllerBase
+    public class ResourceController : ControllerBase
     {
         private readonly IEventsService _eventsService;
         private readonly ILevelsService _levelsService;
 
-        public MenuController(IEventsService eventsService, ILevelsService levelsService)
+        public ResourceController(IEventsService eventsService, ILevelsService levelsService)
         {
             _eventsService = eventsService;
             _levelsService = levelsService;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HistoryAPI.Controllers
 {
-    [Route("history/creation")]
+    [Route("creation")]
     [Produces("application/json")]
     [ApiController]
     public class LevelCreationController : ControllerBase
@@ -30,7 +30,7 @@ namespace HistoryAPI.Controllers
                 return Conflict();
             }
 
-            return Ok(newLevelContract); //TODO: Created at 
+            return Ok(newLevelContract);
         }
 
         [HttpPut]
@@ -38,7 +38,7 @@ namespace HistoryAPI.Controllers
         {
             var updatedLevelContract = await _levelsService.UpdateLevelAsync(level);
 
-            return Ok(updatedLevelContract); //TODO: Created at
+            return Ok(updatedLevelContract);
         }
 
         [HttpDelete("{levelid}")]
