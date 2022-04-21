@@ -9,13 +9,10 @@ namespace Repositories.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement]
         public string date { get; set; }
 
-        [BsonElement]
         public string description { get; set; }
 
-        [BsonElement]
         public string imageSrc { get; set; }
     }
 }
