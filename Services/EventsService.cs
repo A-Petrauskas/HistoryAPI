@@ -34,6 +34,11 @@ namespace Services
         {
             var historyEventEntity = await _eventsRepository.GetAsync(id);
 
+            if (historyEventEntity == null)
+            {
+                return null;
+            }
+
             var historyEventContract = _mapper.Map<EventContract>(historyEventEntity);
 
             return historyEventContract;

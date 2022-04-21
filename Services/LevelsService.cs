@@ -40,6 +40,11 @@ namespace Services
         {
             var levelEntity = await _levelsRepository.GetAsync(id);
 
+            if (levelEntity == null)
+            {
+                return null;
+            }
+
             var levelContract = _mapper.Map<LevelContract>(levelEntity);
 
             var newLevelWithBC = ChangeMinusDatesToBC(levelContract);
@@ -51,6 +56,11 @@ namespace Services
         {
             var levelEntity = await _levelsRepository.GetAsync(id);
 
+            if (levelEntity == null)
+            {
+                return null;
+            }
+
             var levelContract = _mapper.Map<LevelContract>(levelEntity);
 
             return levelContract;
@@ -59,6 +69,11 @@ namespace Services
         public async Task<LevelContract> GetLevelByNameAsync(string name)
         {
             var levelEntity = await _levelsRepository.GetByNameAsync(name);
+
+            if (levelEntity == null)
+            {
+                return null;
+            }
 
             var levelContract = _mapper.Map<LevelContract>(levelEntity);
 
@@ -99,7 +114,12 @@ namespace Services
         {
             var levelEntity = _mapper.Map<LevelEntity>(level);
 
-            await _levelsRepository.UpdateLevelAsync(levelEntity);
+            var updateResult = await _levelsRepository.UpdateLevelAsync(levelEntity);
+
+            if (updateResult == null)
+            {
+                return null;
+            }
 
             var newLevelWithBC = ChangeMinusDatesToBC(level);
 

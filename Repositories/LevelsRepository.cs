@@ -50,6 +50,11 @@ namespace Repositories
         {
             var updatedLevel = await _levels.ReplaceOneAsync(l => l.Id == level.Id, level);
 
+            if (updatedLevel.MatchedCount == 0)
+            {
+                return null;
+            }
+
             return level;
         }
 

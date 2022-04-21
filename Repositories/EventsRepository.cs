@@ -27,7 +27,7 @@ namespace Repositories
 
         public async Task<EventEntity> GetAsync(string id)
         {
-            var task = await _events.FindAsync<EventEntity>(historyEvent => historyEvent.Id == id);
+            var task = await _events.FindAsync(historyEvent => historyEvent.Id == id);
 
             return await task.FirstOrDefaultAsync();
         }

@@ -22,27 +22,53 @@ namespace HistoryAPI.Controllers
 
         [HttpGet("events")]
         public async Task<ActionResult<List<EventContract>>> GetEventsAsync() =>
-            await _eventsService.GetEventsAsync();
+            Ok(await _eventsService.GetEventsAsync());
 
 
         [HttpGet("events/{id}")]
-        public async Task<ActionResult<EventContract>> GetEventAsync(string id) =>
-            await _eventsService.GetEventAsync(id);
+        public async Task<ActionResult<EventContract>> GetEventAsync(string id)
+        {
+            var eventById = await _eventsService.GetEventAsync(id);
+
+            if (eventById == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(eventById);
+        }
 
 
         [HttpGet("levels")]
         public async Task<ActionResult<List<LevelContract>>> GetLevelsAsync() =>
-            await _levelsService.GetLevelsAsync();
+            Ok(await _levelsService.GetLevelsAsync());
 
 
         [HttpGet("levels/id/{id}")]
-        public async Task<ActionResult<LevelContract>> GetLevelAsync(string id) =>
-            await _levelsService.GetLevelAsync(id);
+        public async Task<ActionResult<LevelContract>> GetLevelAsync(string id)
+        {
+            var levelById = await _levelsService.GetLevelAsync(id);
+
+            if (levelById == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(levelById);
+        }
+
 
         [HttpGet("levels/name/{name}")]
         public async Task<ActionResult<LevelContract>> GetLevelByNameAsync(string name)
         {
-            return await _levelsService.GetLevelByNameAsync(name);
+            var levelByName = await _levelsService.GetLevelByNameAsync(name);
+
+            if (levelByName == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(levelByName);
         }
 
     }

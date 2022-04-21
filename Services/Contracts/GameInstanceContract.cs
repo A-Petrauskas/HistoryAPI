@@ -17,7 +17,7 @@ namespace Services.Contracts
 
         public List<EventContract> mistakenEvents;
 
-        public GameState lastGameStateSent;
+        public GameStateContract lastGameStateSent;
 
         public EventContract lastEventContractSent;
 

@@ -22,12 +22,17 @@ namespace HistoryAPI.Controllers
         {
             var gameStartContract = await _gameService.StartNewGameAsync(levelId.levelId);
 
+            if (gameStartContract == null)
+            {
+                return NotFound();
+            }
+
             return Ok(gameStartContract);
         }
 
 
         [HttpPost("{gameid}/guess")]
-        public ActionResult<GameState> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract)
+        public ActionResult<GameStateContract> MakeGuessAsync(string gameid, [FromBody] GuessContract guessContract)
         {
             var game = _gameService.CheckGameExists(gameid);
 
@@ -38,7 +43,7 @@ namespace HistoryAPI.Controllers
 
             if (game.lastGameStateSent.gameStatus != 0)
             {
-                return game.lastGameStateSent;
+                return Ok(game.lastGameStateSent);
             }
 
 

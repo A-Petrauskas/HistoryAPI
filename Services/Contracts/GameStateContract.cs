@@ -1,6 +1,6 @@
 ﻿namespace Services.Contracts
 {
-    public class GameState
+    public class GameStateContract
     {
         public string description { get; set; }
 

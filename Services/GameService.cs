@@ -26,6 +26,11 @@ namespace Services
         {
             var level = await _levelsService.GetLevelNoBCAsync(levelId);
 
+            if (level == null)
+            {
+                return null;
+            }
+
             var gameInstance = new GameInstanceContract
             {
                 gameId = Guid.NewGuid(),
@@ -34,7 +39,7 @@ namespace Services
                 usedEvents = new List<EventContract>(),
                 mistakesAllowed = level.mistakes,
                 mistakenEvents = new List<EventContract>(),
-                lastGameStateSent = new GameState() { gameStatus = EnumGameStatus.stillPlaying },
+                lastGameStateSent = new GameStateContract() { gameStatus = EnumGameStatus.stillPlaying },
                 fullDates = level.fullDates
             };
 
@@ -64,7 +69,7 @@ namespace Services
         }
 
 
-        public GameState MakeGuessAsync(GameInstanceContract game, int placementIndex)
+        public GameStateContract MakeGuessAsync(GameInstanceContract game, int placementIndex)
         {
             // Time constraint checks
             var timeCheckedState = CheckTimeConstraint(game, placementIndex);
@@ -100,7 +105,7 @@ namespace Services
             // Won game check
             if (eventList.Count == 0)
             {
-                var gameState = new GameState { gameStatus = EnumGameStatus.won };
+                var gameState = new GameStateContract { gameStatus = EnumGameStatus.won };
 
                 game.lastGameStateSent = gameState;
 
@@ -139,18 +144,18 @@ namespace Services
         }
 
 
-        public GameState CheckMistakeCount(GameInstanceContract game)
+        public GameStateContract CheckMistakeCount(GameInstanceContract game)
         {
             if (game.mistakes >= game.mistakesAllowed)
             {
-                return new GameState { gameStatus = EnumGameStatus.lost, mistakes = game.mistakes };
+                return new GameStateContract { gameStatus = EnumGameStatus.lost, mistakes = game.mistakes };
             }
 
             return game.lastGameStateSent;
         }
 
 
-        public GameState CheckTimeConstraint(GameInstanceContract game, int placementIndex)
+        public GameStateContract CheckTimeConstraint(GameInstanceContract game, int placementIndex)
         {
             var gameStatus = EnumGameStatus.stillPlaying;
 
@@ -159,7 +164,7 @@ namespace Services
                 gameStatus = EnumGameStatus.lost;
             }
 
-            var gameState = new GameState
+            var gameState = new GameStateContract
             {
                 gameStatus = gameStatus,
                 mistakes = game.mistakes
@@ -169,7 +174,7 @@ namespace Services
         }
 
 
-        public GameState GenerateNewEvent(GameInstanceContract game, EnumFirstTwoEvents firstTwoEvents)
+        public GameStateContract GenerateNewEvent(GameInstanceContract game, EnumFirstTwoEvents firstTwoEvents)
         {
             var eventList = game.levelEventsLeft;
 
@@ -181,7 +186,7 @@ namespace Services
             game.levelEventsLeft = eventList;
 
 
-            var nextEventGameState = _mapper.Map<GameState>(nextEvent);
+            var nextEventGameState = _mapper.Map<GameStateContract>(nextEvent);
             nextEventGameState.mistakes = game.mistakes;
 
 

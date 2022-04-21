@@ -38,7 +38,12 @@ namespace HistoryAPI.Controllers
         {
             var updatedLevelContract = await _levelsService.UpdateLevelAsync(level);
 
-            return Ok(updatedLevelContract);
+            if (updatedLevelContract == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
         [HttpDelete("{levelid}")]
@@ -50,7 +55,7 @@ namespace HistoryAPI.Controllers
 
             await _levelsService.RemoveLevelAsync(levelid);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
