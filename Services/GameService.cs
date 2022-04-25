@@ -69,9 +69,9 @@ namespace Services
         }
 
 
-        public GameStateContract MakeGuessAsync(GameInstanceContract game, int placementIndex)
+        public GameStateContract MakeGuess(GameInstanceContract game, int placementIndex)
         {
-            // Time constraint checks
+            // Time constraint check
             var timeCheckedState = CheckTimeConstraint(game, placementIndex);
 
             if (timeCheckedState.gameStatus == EnumGameStatus.lost)
@@ -82,12 +82,12 @@ namespace Services
             }
 
 
-            // Placement correctness checks
+            // Placement correctness check
             var eventList = game.levelEventsLeft;
 
             if (!IsPlacementCorrect(game, placementIndex))
             {
-                // Mistake limit checks
+                // Mistake limit check
                 var mistakeCountedState = CheckMistakeCount(game);
                 if (mistakeCountedState.gameStatus == EnumGameStatus.lost)
                 {

@@ -19,7 +19,7 @@ namespace Repositories
 
         public async Task<List<LevelEntity>> GetAllAsync()
         {
-            var task = await _levels.FindAsync<LevelEntity>(_ => true);
+            var task = await _levels.FindAsync(_ => true);
 
             return await task.ToListAsync();
         }
@@ -27,7 +27,7 @@ namespace Repositories
 
         public async Task<LevelEntity> GetAsync(string id)
         {
-            var task = await _levels.FindAsync<LevelEntity>(level => level.Id == id);
+            var task = await _levels.FindAsync(level => level.Id == id);
 
             return await task.FirstOrDefaultAsync();
         }

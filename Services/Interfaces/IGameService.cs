@@ -7,7 +7,7 @@ namespace Services.Interfaces
     {
         Task<GameStartContract> StartNewGameAsync(string levelId);
 
-        GameStateContract MakeGuessAsync(GameInstanceContract game, int placementIndex);
+        GameStateContract MakeGuess(GameInstanceContract game, int placementIndex);
 
         GameInstanceContract CheckGameExists(string gameId);
 

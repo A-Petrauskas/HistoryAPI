@@ -65,7 +65,7 @@ namespace HistoryAPI.Controllers
             }
 
 
-            var gameState = _gameService.MakeGuessAsync(game, guessContract.placementIndex);
+            var gameState = _gameService.MakeGuess(game, guessContract.placementIndex);
 
             return Ok(gameState);
         }
