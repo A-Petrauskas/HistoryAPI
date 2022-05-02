@@ -88,7 +88,7 @@ namespace Services.Tests
 
             var eventsPlaced = new List<EventContract>
             {
-                new EventContract {date = "2-12-01"},
+                new EventContract {date = "1678-12-01"},
                 new EventContract {date = "1789-09-07"},
                 new EventContract {date = "1855-02-03"},
                 new EventContract {date = "2021-02-04"},
